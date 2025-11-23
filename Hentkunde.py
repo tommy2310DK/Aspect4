@@ -19,15 +19,22 @@ WSDL = os.path.join(BASE_DIR, 'EA7602RA.wsdl')
 CONFIG_FILE = os.path.join(BASE_DIR, 'config.json')
 
 def load_credentials():
+    # 1. Try Environment Variables (Best for Azure/Cloud)
+    user = os.getenv("ASPECT4_USER")
+    password = os.getenv("ASPECT4_PASSWORD")
+    if user and password:
+        return {"user": user, "password": password}
+
+    # 2. Fallback to config.json (Best for Local Dev)
     try:
         with open(CONFIG_FILE, 'r') as f:
             return json.load(f)
     except FileNotFoundError:
-        print(f"Error: Configuration file '{CONFIG_FILE}' not found.")
-        print("Please create a 'config.json' file with 'user' and 'password' keys.")
+        # Only error if we also didn't find env vars
+        print(f"Error: Credentials not found. Set ASPECT4_USER/PASSWORD env vars or create '{CONFIG_FILE}'.", file=sys.stderr)
         exit(1)
     except json.JSONDecodeError:
-        print(f"Error: Could not decode JSON from '{CONFIG_FILE}'.")
+        print(f"Error: Could not decode JSON from '{CONFIG_FILE}'.", file=sys.stderr)
         exit(1)
 
 CREDENTIALS = load_credentials()
