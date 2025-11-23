@@ -38,28 +38,35 @@ def get_date_filters(days=30):
     one_month_ago = now - timedelta(days=days)
     return int(one_month_ago.strftime('%Y%m%d')), int(now.strftime('%Y%m%d'))
 
-def print_line_details(lines, line_type_key):
-    """Helper function to print lines to avoid duplicated code."""
+import sys
+
+from decimal import Decimal
+
+def json_serial(obj):
+    """JSON serializer for objects not serializable by default json code"""
+    if isinstance(obj, (datetime, timedelta)):
+        return str(obj)
+    if isinstance(obj, Decimal):
+        return float(obj)
+    raise TypeError (f"Type {type(obj)} not serializable")
+
+def extract_lines(lines, line_type_key):
+    """Helper function to extract lines into a list of dictionaries."""
     items = lines.get(line_type_key, [])
     if not items:
-        return
+        return []
 
-    print(f"  Found {len(items)} items in {line_type_key}:")
-    
+    extracted_items = []
     for line in items:
-        output = []
-        # Use .get() to avoid crashes if fields are missing
+        # Construct Varenr
         varenr = f"{line.get('t01.felt2', '')}-{line.get('t01.felt3', '')}-{line.get('t01.felt1', '')}-{line.get('t01.felt5', '')}-{line.get('t01.felt4', '')}"
-        output.append(f"Varenr: {varenr}")
-
-        # Exclude specific keys from the generic output
-        exclude_keys = {"t01.felt2", "t01.felt3", "t01.felt1", "t01.felt5", "t01.felt4", "t01.oordre"}
         
-        for k, v in line.items():
-            if k not in exclude_keys:
-                output.append(f"{k}: {v}")
-        
-        print("    " + " | ".join(output))
+        item_data = {
+            'varenr': varenr,
+            'raw_data': line
+        }
+        extracted_items.append(item_data)
+    return extracted_items
 
 def main():
     parser = argparse.ArgumentParser(description='Fetch customer orders from Aspect4')
@@ -71,7 +78,7 @@ def main():
     try:
         client = Client(WSDL)
     except Exception as e:
-        print(f"Error loading WSDL: {e}")
+        print(json.dumps({"error": f"Error loading WSDL: {str(e)}"}), file=sys.stderr)
         return
 
     min_dato, max_dato = get_date_filters(args.days)
@@ -86,13 +93,15 @@ def main():
         orders_response = client.service.orderget(CREDENTIALS, order_request)
         orders = serialize_object(orders_response)
     except Exception as e:
-        print(f"Error fetching orders: {e}")
+        print(json.dumps({"error": f"Error fetching orders: {str(e)}"}), file=sys.stderr)
         return
 
     # Check if 'grporder' exists before iterating
     if not orders or 'grporder' not in orders:
-        print("No orders found.")
+        print(json.dumps([])) # Return empty list if no orders
         return
+
+    output_results = []
 
     for order in orders['grporder']:
         ordrenr = order.get('t01.oordre')
@@ -100,26 +109,32 @@ def main():
 
         # Ensure we have data to compare
         if ordrenr and ordredato and (min_dato <= ordredato <= max_dato):
-            print(f"Ordre nr: {ordrenr} ordre dato: {ordredato}")
-            print('----------------------')
+            order_obj = {
+                'order_number': ordrenr,
+                'order_date': ordredato,
+                'order_lines': [],
+                'status_lines': []
+            }
 
-            # Fetch and print standard order lines
+            # Fetch standard order lines
             try:
                 lines_response = client.service.orderlinesget(CREDENTIALS, {'t01.oordre': ordrenr})
                 lines = serialize_object(lines_response)
-                print_line_details(lines, 'grpordline')
+                order_obj['order_lines'] = extract_lines(lines, 'grpordline')
             except Exception as e:
-                print(f"    Error fetching orderlines: {e}")
+                print(f"Error fetching orderlines for {ordrenr}: {e}", file=sys.stderr)
 
-            # Fetch and print status order lines
+            # Fetch status order lines
             try:
                 sta_lines_response = client.service.staordlinesget(CREDENTIALS, {'t01.oordre': ordrenr})
                 sta_lines = serialize_object(sta_lines_response)
-                print_line_details(sta_lines, 'grpstaordline')
+                order_obj['status_lines'] = extract_lines(sta_lines, 'grpstaordline')
             except Exception as e:
-                print(f"    Error fetching staordlines: {e}")
+                print(f"Error fetching staordlines for {ordrenr}: {e}", file=sys.stderr)
 
-            print('-----------------------\n')
+            output_results.append(order_obj)
+
+    print(json.dumps(output_results, indent=2, default=json_serial))
 
 if __name__ == "__main__":
     main()
