@@ -1,5 +1,7 @@
+import os
+import sys
 from fastapi import FastAPI, Query
-from typing import Optional, List
+from typing import Optional, List, Union
 from pydantic import BaseModel
 import Hentkunde
 
@@ -8,6 +10,14 @@ app = FastAPI(
     description="API to fetch customer orders from Aspect4",
     version="1.0.0"
 )
+
+@app.on_event("startup")
+async def startup_event():
+    if not os.path.exists(Hentkunde.WSDL):
+        print(f"CRITICAL ERROR: WSDL file not found at: {Hentkunde.WSDL}", file=sys.stderr)
+        # List files in current directory to help debug
+        print(f"Current working directory: {os.getcwd()}", file=sys.stderr)
+        print(f"Files in current directory: {os.listdir(os.getcwd())}", file=sys.stderr)
 
 # Define response models for better documentation in Swagger
 class OrderLine(BaseModel):
