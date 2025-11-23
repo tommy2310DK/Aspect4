@@ -68,38 +68,36 @@ def extract_lines(lines, line_type_key):
         extracted_items.append(item_data)
     return extracted_items
 
-def main():
-    parser = argparse.ArgumentParser(description='Fetch customer orders from Aspect4')
-    parser.add_argument('customer', type=str, help='Customer number')
-    parser.add_argument('--order', type=str, help='Order number (optional)')
-    parser.add_argument('--days', type=int, default=30, help='Days to look back (default: 30)')
-    args = parser.parse_args()
-
+def fetch_orders(customer, order_number=None, days=30):
+    """
+    Fetches orders for a given customer.
+    Returns a list of dictionaries (order objects).
+    """
     try:
         client = Client(WSDL)
     except Exception as e:
+        # In a real app, you might want to raise a specific error or return it
         print(json.dumps({"error": f"Error loading WSDL: {str(e)}"}), file=sys.stderr)
-        return
+        return []
 
-    min_dato, max_dato = get_date_filters(args.days)
+    min_dato, max_dato = get_date_filters(days)
 
     order_request = {
-        't01.chgto': args.customer,
+        't01.chgto': customer,
     }
-    if args.order:
-        order_request['aordrenr'] = args.order
+    if order_number:
+        order_request['aordrenr'] = order_number
 
     try:
         orders_response = client.service.orderget(CREDENTIALS, order_request)
         orders = serialize_object(orders_response)
     except Exception as e:
         print(json.dumps({"error": f"Error fetching orders: {str(e)}"}), file=sys.stderr)
-        return
+        return []
 
     # Check if 'grporder' exists before iterating
     if not orders or 'grporder' not in orders:
-        print(json.dumps([])) # Return empty list if no orders
-        return
+        return []
 
     output_results = []
 
@@ -133,8 +131,18 @@ def main():
                 print(f"Error fetching staordlines for {ordrenr}: {e}", file=sys.stderr)
 
             output_results.append(order_obj)
+            
+    return output_results
 
-    print(json.dumps(output_results, indent=2, default=json_serial))
+def run_cli():
+    parser = argparse.ArgumentParser(description='Fetch customer orders from Aspect4')
+    parser.add_argument('customer', type=str, help='Customer number')
+    parser.add_argument('--order', type=str, help='Order number (optional)')
+    parser.add_argument('--days', type=int, default=30, help='Days to look back (default: 30)')
+    args = parser.parse_args()
+
+    results = fetch_orders(args.customer, args.order, args.days)
+    print(json.dumps(results, indent=2, default=json_serial))
 
 if __name__ == "__main__":
-    main()
+    run_cli()
