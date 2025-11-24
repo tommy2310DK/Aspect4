@@ -7,6 +7,8 @@ import Hentkunde
 import os
 import sys
 
+from fastapi.middleware.cors import CORSMiddleware
+
 app = FastAPI(
     title="Aspect4 Order API",
     description="API to fetch customer orders from Aspect4",
@@ -14,6 +16,14 @@ app = FastAPI(
     servers=[
         {"url": "https://aspect4-api-efacama5adafdvfd.westeurope-01.azurewebsites.net", "description": "Production Server"}
     ]
+)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Allows all origins
+    allow_credentials=True,
+    allow_methods=["*"],  # Allows all methods
+    allow_headers=["*"],  # Allows all headers
 )
 
 def custom_openapi():
