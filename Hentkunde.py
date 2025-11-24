@@ -131,7 +131,7 @@ def fetch_orders(customer, order_number=None, days=30):
         # Ensure we have data to compare
         if ordrenr and ordredato and (min_dato <= ordredato <= max_dato):
             order_obj = {
-                'order_number': ordrenr,
+                'order_number': str(ordrenr),
                 'order_date': ordredato,
                 'order_lines': [],
                 'status_lines': []
