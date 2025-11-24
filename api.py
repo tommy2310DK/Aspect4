@@ -9,7 +9,6 @@ app = FastAPI(
     title="Aspect4 Order API",
     description="API to fetch customer orders from Aspect4",
     version="1.0.0",
-    openapi_version="3.0.2", # Downgrade to 3.0.2 for Copilot Studio compatibility
     servers=[
         {"url": "https://aspect4-api-tom-c2g8bne3bzgjbzag.westeurope-01.azurewebsites.net", "description": "Production Server"}
     ]
