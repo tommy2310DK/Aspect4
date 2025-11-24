@@ -1,14 +1,15 @@
-import os
-import sys
-from fastapi import FastAPI, Query
+from fastapi import FastAPI, Query, Path
 from typing import Optional, List, Union
 from pydantic import BaseModel
 import Hentkunde
+import os
+import sys
 
 app = FastAPI(
     title="Aspect4 Order API",
     description="API to fetch customer orders from Aspect4",
     version="1.0.0",
+    openapi_version="3.0.2", # Downgrade to 3.0.2 for Copilot Studio compatibility
     servers=[
         {"url": "https://aspect4-api-tom-c2g8bne3bzgjbzag.westeurope-01.azurewebsites.net", "description": "Production Server"}
     ]
@@ -35,9 +36,9 @@ class Order(BaseModel):
     order_lines: List[OrderLine]
     status_lines: List[OrderLine]
 
-@app.get("/orders/{customer_id}", response_model=List[Order])
+@app.get("/orders/{customer_id}", response_model=List[Order], operation_id="GetCustomerOrders", summary="Get Customer Orders")
 def get_orders(
-    customer_id: str, 
+    customer_id: str = Path(..., description="The ID of the customer to fetch orders for"),
     order_number: Optional[str] = Query(None, description="Specific order number to fetch"),
     days: int = Query(30, description="Number of days to look back")
 ):
