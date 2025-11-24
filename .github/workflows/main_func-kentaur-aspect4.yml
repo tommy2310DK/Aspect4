@@ -61,4 +61,4 @@ jobs:
           app-name: 'func-kentaur-aspect4-b7hdbxhve0a0c9hj'
           slot-name: 'Production'
           package: ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_1B78E403B5024683BE2A5957816E9749 }}
+          publish-profile: ${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE }}
