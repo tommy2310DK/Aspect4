@@ -5,15 +5,56 @@ import Hentkunde
 import os
 import sys
 
+from fastapi.openapi.utils import get_openapi
+
 app = FastAPI(
     title="Aspect4 Order API",
     description="API to fetch customer orders from Aspect4",
     version="1.0.0",
-    openapi_version="3.0.2", # Explicitly set OpenAPI version
     servers=[
         {"url": "https://aspect4-api-tom-c2g8bne3bzgjbzag.westeurope-01.azurewebsites.net", "description": "Production Server"}
     ]
 )
+
+def custom_openapi():
+    if app.openapi_schema:
+        return app.openapi_schema
+    
+    openapi_schema = get_openapi(
+        title=app.title,
+        version=app.version,
+        description=app.description,
+        routes=app.routes,
+    )
+    
+    # Force OpenAPI version 3.0.2 for Copilot Studio compatibility
+    openapi_schema["openapi"] = "3.0.2"
+    
+    # Helper to clean up the schema recursively
+    def clean_schema(node):
+        if isinstance(node, dict):
+            # Fix 'anyOf' with 'null' which is standard in OpenAPI 3.1 but breaks some 3.0 parsers
+            if "anyOf" in node:
+                # Filter out the 'null' type
+                non_null_types = [x for x in node["anyOf"] if x.get("type") != "null"]
+                if len(non_null_types) == 1:
+                    # If only one type remains (e.g. string), use that directly
+                    node.update(non_null_types[0])
+                    del node["anyOf"]
+                    node["nullable"] = True
+            
+            for key, value in node.items():
+                clean_schema(value)
+        elif isinstance(node, list):
+            for item in node:
+                clean_schema(item)
+
+    clean_schema(openapi_schema)
+    
+    app.openapi_schema = openapi_schema
+    return app.openapi_schema
+
+app.openapi = custom_openapi
 
 @app.get("/", include_in_schema=False)
 async def root():
