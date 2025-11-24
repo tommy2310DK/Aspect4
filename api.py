@@ -80,7 +80,7 @@ class OrderLine(BaseModel):
 from typing import Union
 
 class Order(BaseModel):
-    order_number: Union[str, int]
+    order_number: str
     order_date: int
     order_lines: List[OrderLine]
     status_lines: List[OrderLine]
