@@ -12,7 +12,7 @@ app = FastAPI(
     description="API to fetch customer orders from Aspect4",
     version="1.0.0",
     servers=[
-        {"url": "https://aspect4-api-tom-c2g8bne3bzgjbzag.westeurope-01.azurewebsites.net", "description": "Production Server"}
+        {"url": "https://func-kentaur-aspect4-b7hdbxhve0a0c9hj.westeurope-01.azurewebsites.net", "description": "Production Server"}
     ]
 )
 
