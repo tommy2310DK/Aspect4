@@ -31,13 +31,24 @@ def load_credentials():
             return json.load(f)
     except FileNotFoundError:
         # Only error if we also didn't find env vars
-        print(f"Error: Credentials not found. Set ASPECT4_USER/PASSWORD env vars or create '{CONFIG_FILE}'.", file=sys.stderr)
-        exit(1)
+        raise ValueError(f"Error: Credentials not found. Set ASPECT4_USER/PASSWORD env vars or create '{CONFIG_FILE}'.")
     except json.JSONDecodeError:
-        print(f"Error: Could not decode JSON from '{CONFIG_FILE}'.", file=sys.stderr)
-        exit(1)
+        raise ValueError(f"Error: Could not decode JSON from '{CONFIG_FILE}'.")
 
-CREDENTIALS = load_credentials()
+# Global variable to store credentials
+_CREDENTIALS = None
+
+def get_credentials():
+    global _CREDENTIALS
+    if _CREDENTIALS is None:
+        try:
+            _CREDENTIALS = load_credentials()
+        except ValueError as e:
+            print(str(e), file=sys.stderr)
+            # Return None or raise, depending on usage. 
+            # For API stability, we return None and let the caller handle it.
+            return None
+    return _CREDENTIALS
 
 def get_date_filters(days=30):
     """Returns min and max dates in YYYYMMDD integer format."""
@@ -95,8 +106,13 @@ def fetch_orders(customer, order_number=None, days=30):
     if order_number:
         order_request['aordrenr'] = order_number
 
+    creds = get_credentials()
+    if not creds:
+        print(json.dumps({"error": "Missing credentials"}), file=sys.stderr)
+        return []
+
     try:
-        orders_response = client.service.orderget(CREDENTIALS, order_request)
+        orders_response = client.service.orderget(creds, order_request)
         orders = serialize_object(orders_response)
     except Exception as e:
         print(json.dumps({"error": f"Error fetching orders: {str(e)}"}), file=sys.stderr)
@@ -123,7 +139,7 @@ def fetch_orders(customer, order_number=None, days=30):
 
             # Fetch standard order lines
             try:
-                lines_response = client.service.orderlinesget(CREDENTIALS, {'t01.oordre': ordrenr})
+                lines_response = client.service.orderlinesget(creds, {'t01.oordre': ordrenr})
                 lines = serialize_object(lines_response)
                 order_obj['order_lines'] = extract_lines(lines, 'grpordline')
             except Exception as e:
@@ -131,7 +147,7 @@ def fetch_orders(customer, order_number=None, days=30):
 
             # Fetch status order lines
             try:
-                sta_lines_response = client.service.staordlinesget(CREDENTIALS, {'t01.oordre': ordrenr})
+                sta_lines_response = client.service.staordlinesget(creds, {'t01.oordre': ordrenr})
                 sta_lines = serialize_object(sta_lines_response)
                 order_obj['status_lines'] = extract_lines(sta_lines, 'grpstaordline')
             except Exception as e:
