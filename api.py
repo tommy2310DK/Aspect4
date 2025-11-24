@@ -1,11 +1,3 @@
-from fastapi import FastAPI, Query, Path
-from typing import Optional, List, Union
-from pydantic import BaseModel
-import Hentkunde
-import os
-import sys
-
-from fastapi.openapi.utils import get_openapi
 
 app = FastAPI(
     title="Aspect4 Order API",
@@ -94,9 +86,16 @@ def get_orders(
     """
     Fetch orders for a specific customer.
     """
-    # Call the logic from your existing script
-    results = Hentkunde.fetch_orders(customer_id, order_number, days)
-    return results
+    try:
+        # Call the logic from your existing script
+        results = Hentkunde.fetch_orders(customer_id, order_number, days)
+        return results
+    except Exception as e:
+        import traceback
+        error_details = traceback.format_exc()
+        print(f"Error fetching orders: {e}", file=sys.stderr)
+        print(error_details, file=sys.stderr)
+        return JSONResponse(status_code=500, content={"message": f"Internal Server Error: {str(e)}", "traceback": error_details})
 
 if __name__ == "__main__":
     import uvicorn
