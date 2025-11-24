@@ -15,6 +15,10 @@ app = FastAPI(
     ]
 )
 
+@app.get("/", include_in_schema=False)
+async def root():
+    return {"message": "Aspect4 Order API is running", "docs_url": "/docs", "openapi_url": "/openapi.json"}
+
 @app.get("/health", include_in_schema=False)
 async def health_check():
     return {"status": "ok", "version": "1.0.0"}
