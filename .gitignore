@@ -1,3 +1,5 @@
-config.json
-__pycache__/
 *.pyc
+__pycache__
+.venv
+.vscode
+local.settings.json
