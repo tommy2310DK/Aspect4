@@ -1,5 +1,5 @@
 fastapi==0.99.1
 pydantic==1.10.13
-uvicorn
-gunicorn
-zeep
+uvicorn==0.23.2
+gunicorn==21.2.0
+zeep==4.2.1
