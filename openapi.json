@@ -60,151 +60,153 @@
                                     "title": "Response Getcustomerorders"
                                 }
                             }
-                        },
-                        "422": {
-                            "description": "Validation Error",
-                            "content": {
-                                "application/json": {
-                                    "schema": {
-                                        "$ref": "#/components/schemas/HTTPValidationError"
-                                    }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
                                 }
                             }
                         }
                     }
                 }
-            },
-            "components": {
-                "schemas": {
-                    "HTTPValidationError": {
-                        "properties": {
-                            "detail": {
-                                "items": {
-                                    "$ref": "#/components/schemas/ValidationError"
-                                },
-                                "type": "array",
-                                "title": "Detail"
-                            }
-                        },
-                        "type": "object",
-                        "title": "HTTPValidationError"
-                    },
-                    "Order": {
-                        "properties": {
-                            "order_number": {
-                                "type": "string",
-                                "title": "Order Number"
-                            },
-                            "order_date": {
-                                "type": "string",
-                                "title": "Order Date"
-                            },
-                            "order_lines": {
-                                "items": {
-                                    "$ref": "#/components/schemas/OrderLine"
-                                },
-                                "type": "array",
-                                "title": "Order Lines"
-                            },
-                            "status_lines": {
-                                "items": {
-                                    "$ref": "#/components/schemas/OrderLine"
-                                },
-                                "type": "array",
-                                "title": "Status Lines"
-                            }
-                        },
-                        "type": "object",
-                        "required": [
-                            "order_number",
-                            "order_date",
-                            "order_lines",
-                            "status_lines"
-                        ],
-                        "title": "Order"
-                    },
-                    "OrderLine": {
-                        "properties": {
-                            "varenr": {
-                                "type": "string",
-                                "title": "Varenr"
-                            },
-                            "quantity": {
-                                "type": "string",
-                                "title": "Quantity",
-                                "nullable": true
-                            },
-                            "unit_price": {
-                                "type": "string",
-                                "title": "Unit Price",
-                                "nullable": true
-                            },
-                            "description": {
-                                "type": "string",
-                                "title": "Description",
-                                "nullable": true
-                            },
-                            "line_number": {
-                                "type": "string",
-                                "title": "Line Number",
-                                "nullable": true
-                            },
-                            "delivery_date": {
-                                "type": "string",
-                                "title": "Delivery Date",
-                                "nullable": true
-                            },
-                            "status": {
-                                "type": "string",
-                                "title": "Status",
-                                "nullable": true
-                            }
-                        },
-                        "type": "object",
-                        "required": [
-                            "varenr"
-                        ],
-                        "title": "OrderLine"
-                    },
-                    "ValidationError": {
-                        "properties": {
-                            "loc": {
-                                "items": {
-                                    "anyOf": [
-                                        {
-                                            "type": "string"
-                                        },
-                                        {
-                                            "type": "integer"
-                                        }
-                                    ]
-                                },
-                                "type": "array",
-                                "title": "Location"
-                            },
-                            "msg": {
-                                "type": "string",
-                                "title": "Message"
-                            },
-                            "type": {
-                                "type": "string",
-                                "title": "Error Type"
-                            }
-                        },
-                        "type": "object",
-                        "required": [
-                            "loc",
-                            "msg",
-                            "type"
-                        ],
-                        "title": "ValidationError"
-                    }
-                }
-            },
-            "servers": [
-                {
-                    "url": "https://aspect4-api-efacama5adafdvfd.westeurope-01.azurewebsites.net",
-                    "description": "Production Server"
-                }
-            ]
+            }
         }
+    },
+    "components": {
+        "schemas": {
+            "HTTPValidationError": {
+                "properties": {
+                    "detail": {
+                        "items": {
+                            "$ref": "#/components/schemas/ValidationError"
+                        },
+                        "type": "array",
+                        "title": "Detail"
+                    }
+                },
+                "type": "object",
+                "title": "HTTPValidationError"
+            },
+            "Order": {
+                "properties": {
+                    "order_number": {
+                        "type": "string",
+                        "title": "Order Number"
+                    },
+                    "order_date": {
+                        "type": "string",
+                        "title": "Order Date"
+                    },
+                    "order_lines": {
+                        "items": {
+                            "$ref": "#/components/schemas/OrderLine"
+                        },
+                        "type": "array",
+                        "title": "Order Lines"
+                    },
+                    "status_lines": {
+                        "items": {
+                            "$ref": "#/components/schemas/OrderLine"
+                        },
+                        "type": "array",
+                        "title": "Status Lines"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "order_number",
+                    "order_date",
+                    "order_lines",
+                    "status_lines"
+                ],
+                "title": "Order"
+            },
+            "OrderLine": {
+                "properties": {
+                    "varenr": {
+                        "type": "string",
+                        "title": "Varenr"
+                    },
+                    "quantity": {
+                        "type": "string",
+                        "title": "Quantity"
+                    },
+                    "unit_price": {
+                        "type": "string",
+                        "title": "Unit Price"
+                    },
+                    "description": {
+                        "type": "string",
+                        "title": "Description"
+                    },
+                    "line_number": {
+                        "type": "string",
+                        "title": "Line Number"
+                    },
+                    "delivery_date": {
+                        "type": "string",
+                        "title": "Delivery Date"
+                    },
+                    "status": {
+                        "type": "string",
+                        "title": "Status"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "varenr",
+                    "quantity",
+                    "unit_price",
+                    "description",
+                    "line_number",
+                    "delivery_date",
+                    "status"
+                ],
+                "title": "OrderLine"
+            },
+            "ValidationError": {
+                "properties": {
+                    "loc": {
+                        "items": {
+                            "anyOf": [
+                                {
+                                    "type": "string"
+                                },
+                                {
+                                    "type": "integer"
+                                }
+                            ]
+                        },
+                        "type": "array",
+                        "title": "Location"
+                    },
+                    "msg": {
+                        "type": "string",
+                        "title": "Message"
+                    },
+                    "type": {
+                        "type": "string",
+                        "title": "Error Type"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "loc",
+                    "msg",
+                    "type"
+                ],
+                "title": "ValidationError"
+            }
+        }
+    },
+    "servers": [
+        {
+            "url": "https://aspect4-api-efacama5adafdvfd.westeurope-01.azurewebsites.net",
+            "description": "Production Server"
+        }
+    ]
+}
