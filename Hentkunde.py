@@ -79,15 +79,34 @@ def extract_lines(lines, line_type_key):
         # Construct Varenr
         varenr = f"{line.get('t01.felt2', '')}-{line.get('t01.felt3', '')}-{line.get('t01.felt1', '')}-{line.get('t01.felt5', '')}-{line.get('t01.felt4', '')}"
         
-        # Extract key fields and convert to strings
+        # Extract key fields and convert to strings, handling different field names in WSDL
+        
+        # Quantity: 'antal' in WSDL
+        quantity = line.get('antal') or line.get('t01.felt10') or ''
+        
+        # Unit Price: 'brutto' (OrderLines) or 'apris' (StatusLines)
+        unit_price = line.get('brutto') or line.get('apris') or line.get('t01.felt11') or ''
+        
+        # Description: 'fvatxt' (OrderLines) or 'vartxt' (StatusLines)
+        description = line.get('fvatxt') or line.get('vartxt') or line.get('t01.felt6') or ''
+        
+        # Line Number: 't01.oorlin'
+        line_number = line.get('t01.oorlin') or line.get('t01.felt7') or ''
+        
+        # Delivery Date: 't01.senlv' (OrderLines)
+        delivery_date = line.get('t01.senlv') or line.get('t01.felt8') or ''
+        
+        # Status: 'status' (OrderLines)
+        status = line.get('status') or line.get('t01.felt9') or ''
+
         item_data = {
             'varenr': str(varenr),
-            'quantity': str(line.get('t01.felt10', '')),
-            'unit_price': str(line.get('t01.felt11', '')),
-            'description': str(line.get('t01.felt6', '')),
-            'line_number': str(line.get('t01.felt7', '')),
-            'delivery_date': str(line.get('t01.felt8', '')),
-            'status': str(line.get('t01.felt9', ''))
+            'quantity': str(quantity),
+            'unit_price': str(unit_price),
+            'description': str(description),
+            'line_number': str(line_number),
+            'delivery_date': str(delivery_date),
+            'status': str(status)
         }
         extracted_items.append(item_data)
     return extracted_items
