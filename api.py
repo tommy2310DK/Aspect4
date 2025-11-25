@@ -61,6 +61,14 @@ def custom_openapi():
 
     clean_schema(openapi_schema)
     
+    # Add servers field for Power Automate compatibility
+    openapi_schema["servers"] = [
+        {
+            "url": "https://aspect4-api-efacama5adafdvfd.westeurope-01.azurewebsites.net",
+            "description": "Production Server"
+        }
+    ]
+    
     app.openapi_schema = openapi_schema
     return app.openapi_schema
 
