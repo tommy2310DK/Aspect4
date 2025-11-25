@@ -81,7 +81,7 @@ def extract_lines(lines, line_type_key):
         
         item_data = {
             'varenr': varenr,
-            'raw_data': json.dumps(line, default=json_serial)
+            'raw_data': line
         }
         extracted_items.append(item_data)
     return extracted_items
@@ -133,15 +133,16 @@ def fetch_orders(customer, order_number=None, days=30):
             order_obj = {
                 'order_number': str(ordrenr),
                 'order_date': str(ordredato),
-                'order_lines': [],
-                'status_lines': []
+                'order_lines_json': "[]",
+                'status_lines_json': "[]"
             }
 
             # Fetch standard order lines
             try:
                 lines_response = client.service.orderlinesget(creds, {'t01.oordre': ordrenr})
                 lines = serialize_object(lines_response)
-                order_obj['order_lines'] = extract_lines(lines, 'grpordline')
+                extracted = extract_lines(lines, 'grpordline')
+                order_obj['order_lines_json'] = json.dumps(extracted, default=json_serial)
             except Exception as e:
                 print(f"Error fetching orderlines for {ordrenr}: {e}", file=sys.stderr)
 
@@ -149,7 +150,8 @@ def fetch_orders(customer, order_number=None, days=30):
             try:
                 sta_lines_response = client.service.staordlinesget(creds, {'t01.oordre': ordrenr})
                 sta_lines = serialize_object(sta_lines_response)
-                order_obj['status_lines'] = extract_lines(sta_lines, 'grpstaordline')
+                extracted = extract_lines(sta_lines, 'grpstaordline')
+                order_obj['status_lines_json'] = json.dumps(extracted, default=json_serial)
             except Exception as e:
                 print(f"Error fetching staordlines for {ordrenr}: {e}", file=sys.stderr)
 
