@@ -81,7 +81,7 @@ def extract_lines(lines, line_type_key):
         
         item_data = {
             'varenr': varenr,
-            'raw_data': line
+            'raw_data': json.dumps(line, default=json_serial)
         }
         extracted_items.append(item_data)
     return extracted_items
@@ -132,7 +132,7 @@ def fetch_orders(customer, order_number=None, days=30):
         if ordrenr and ordredato and (min_dato <= ordredato <= max_dato):
             order_obj = {
                 'order_number': str(ordrenr),
-                'order_date': ordredato,
+                'order_date': str(ordredato),
                 'order_lines': [],
                 'status_lines': []
             }

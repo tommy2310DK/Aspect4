@@ -85,13 +85,13 @@ async def startup_event():
 # Define response models for better documentation in Swagger
 class OrderLine(BaseModel):
     varenr: str
-    raw_data: dict
+    raw_data: str
 
 from typing import Union
 
 class Order(BaseModel):
     order_number: str
-    order_date: int
+    order_date: str
     order_lines: List[OrderLine]
     status_lines: List[OrderLine]
 
