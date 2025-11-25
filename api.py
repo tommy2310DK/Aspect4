@@ -83,13 +83,11 @@ async def startup_event():
         print(f"Files in current directory: {os.listdir(os.getcwd())}", file=sys.stderr)
 
 # Define response models for better documentation in Swagger
-class Order(BaseModel):
-    order_number: str
-    order_date: str
-    order_lines_json: str
-    status_lines_json: str
+class OrdersResponse(BaseModel):
+    orders_json: str
+    order_count: str
 
-@app.get("/orders/{customer_id}", response_model=List[Order], operation_id="GetCustomerOrders", summary="Get Customer Orders")
+@app.get("/orders/{customer_id}", response_model=OrdersResponse, operation_id="GetCustomerOrders", summary="Get Customer Orders")
 def get_orders(
     customer_id: str = Path(..., description="The ID of the customer to fetch orders for"),
     order_number: Optional[str] = Query(None, description="Specific order number to fetch"),

@@ -156,8 +156,12 @@ def fetch_orders(customer, order_number=None, days=30):
                 print(f"Error fetching staordlines for {ordrenr}: {e}", file=sys.stderr)
 
             output_results.append(order_obj)
-            
-    return output_results
+    
+    # Return a single object with all orders as JSON string for Copilot Studio compatibility
+    return {
+        "orders_json": json.dumps(output_results, default=json_serial),
+        "order_count": str(len(output_results))
+    }
 
 def run_cli():
     parser = argparse.ArgumentParser(description='Fetch customer orders from Aspect4')
