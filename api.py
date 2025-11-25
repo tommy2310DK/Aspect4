@@ -83,11 +83,22 @@ async def startup_event():
         print(f"Files in current directory: {os.listdir(os.getcwd())}", file=sys.stderr)
 
 # Define response models for better documentation in Swagger
-class OrdersResponse(BaseModel):
-    orders_json: str
-    order_count: str
+class OrderLine(BaseModel):
+    varenr: str
+    quantity: str
+    unit_price: str
+    description: str
+    line_number: str
+    delivery_date: str
+    status: str
 
-@app.get("/orders/{customer_id}", response_model=OrdersResponse, operation_id="GetCustomerOrders", summary="Get Customer Orders")
+class Order(BaseModel):
+    order_number: str
+    order_date: str
+    order_lines: List[OrderLine]
+    status_lines: List[OrderLine]
+
+@app.get("/orders/{customer_id}", response_model=List[Order], operation_id="GetCustomerOrders", summary="Get Customer Orders")
 def get_orders(
     customer_id: str = Path(..., description="The ID of the customer to fetch orders for"),
     order_number: Optional[str] = Query(None, description="Specific order number to fetch"),
@@ -102,7 +113,7 @@ def get_orders(
     try:
         # Call the logic from your existing script
         results = Hentkunde.fetch_orders(customer_id, order_number, days)
-        print(f"DEBUG: Returning {results.get('order_count', 'unknown')} orders", file=sys.stderr)
+        print(f"DEBUG: Returning {len(results)} orders", file=sys.stderr)
         return results
     except Exception as e:
         import traceback

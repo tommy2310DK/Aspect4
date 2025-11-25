@@ -69,7 +69,7 @@ def json_serial(obj):
     raise TypeError (f"Type {type(obj)} not serializable")
 
 def extract_lines(lines, line_type_key):
-    """Helper function to extract lines into a list of dictionaries."""
+    """Helper function to extract lines into a list of structured dictionaries."""
     items = lines.get(line_type_key, [])
     if not items:
         return []
@@ -79,9 +79,15 @@ def extract_lines(lines, line_type_key):
         # Construct Varenr
         varenr = f"{line.get('t01.felt2', '')}-{line.get('t01.felt3', '')}-{line.get('t01.felt1', '')}-{line.get('t01.felt5', '')}-{line.get('t01.felt4', '')}"
         
+        # Extract key fields and convert to strings
         item_data = {
-            'varenr': varenr,
-            'raw_data': line
+            'varenr': str(varenr),
+            'quantity': str(line.get('t01.felt10', '')),
+            'unit_price': str(line.get('t01.felt11', '')),
+            'description': str(line.get('t01.felt6', '')),
+            'line_number': str(line.get('t01.felt7', '')),
+            'delivery_date': str(line.get('t01.felt8', '')),
+            'status': str(line.get('t01.felt9', ''))
         }
         extracted_items.append(item_data)
     return extracted_items
@@ -133,16 +139,15 @@ def fetch_orders(customer, order_number=None, days=30):
             order_obj = {
                 'order_number': str(ordrenr),
                 'order_date': str(ordredato),
-                'order_lines_json': "[]",
-                'status_lines_json': "[]"
+                'order_lines': [],
+                'status_lines': []
             }
 
             # Fetch standard order lines
             try:
                 lines_response = client.service.orderlinesget(creds, {'t01.oordre': ordrenr})
                 lines = serialize_object(lines_response)
-                extracted = extract_lines(lines, 'grpordline')
-                order_obj['order_lines_json'] = json.dumps(extracted, default=json_serial)
+                order_obj['order_lines'] = extract_lines(lines, 'grpordline')
             except Exception as e:
                 print(f"Error fetching orderlines for {ordrenr}: {e}", file=sys.stderr)
 
@@ -150,18 +155,14 @@ def fetch_orders(customer, order_number=None, days=30):
             try:
                 sta_lines_response = client.service.staordlinesget(creds, {'t01.oordre': ordrenr})
                 sta_lines = serialize_object(sta_lines_response)
-                extracted = extract_lines(sta_lines, 'grpstaordline')
-                order_obj['status_lines_json'] = json.dumps(extracted, default=json_serial)
+                order_obj['status_lines'] = extract_lines(sta_lines, 'grpstaordline')
             except Exception as e:
                 print(f"Error fetching staordlines for {ordrenr}: {e}", file=sys.stderr)
 
             output_results.append(order_obj)
     
-    # Return a single object with all orders as JSON string for Copilot Studio compatibility
-    return {
-        "orders_json": json.dumps(output_results, default=json_serial),
-        "order_count": str(len(output_results))
-    }
+    # Return structured list of orders
+    return output_results
 
 def run_cli():
     parser = argparse.ArgumentParser(description='Fetch customer orders from Aspect4')
