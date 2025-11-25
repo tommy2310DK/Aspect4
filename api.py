@@ -91,14 +91,18 @@ class OrdersResponse(BaseModel):
 def get_orders(
     customer_id: str = Path(..., description="The ID of the customer to fetch orders for"),
     order_number: Optional[str] = Query(None, description="Specific order number to fetch"),
-    days: int = Query(30, description="Number of days to look back")
+    days: int = Query(..., description="Number of days to look back")
 ):
     """
     Fetch orders for a specific customer.
     """
+    # Debug logging
+    print(f"DEBUG: Received parameters - customer_id: {customer_id}, order_number: {order_number}, days: {days}", file=sys.stderr)
+    
     try:
         # Call the logic from your existing script
         results = Hentkunde.fetch_orders(customer_id, order_number, days)
+        print(f"DEBUG: Returning {results.get('order_count', 'unknown')} orders", file=sys.stderr)
         return results
     except Exception as e:
         import traceback
