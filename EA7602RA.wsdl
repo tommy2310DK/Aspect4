@@ -1,0 +1,2324 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions targetNamespace="http://ea7602ra.ws.aspect4.eg.dk" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://ea7602ra.ws.aspect4.eg.dk" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wsse="http://ws.aspect4.eg.dk" xmlns:wsi="http://ws-i.org/profiles/basic/1.1/xsd" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/">
+<wsdl:documentation>KET Webservice Spc</wsdl:documentation>
+  <wsdl:types>
+    <schema targetNamespace="http://ea7602ra.ws.aspect4.eg.dk" xmlns="http://www.w3.org/2001/XMLSchema">
+<complexType name="Credentials">
+<sequence>
+<element maxOccurs="1" minOccurs="1" name="user" type="xsd:string"/>
+<element maxOccurs="1" minOccurs="1" name="password" type="xsd:string"/>
+</sequence>
+</complexType>
+<complexType name="CallError">
+<sequence>
+<element maxOccurs="1" minOccurs="1" name="errorid" type="xsd:string"/>
+<element maxOccurs="1" minOccurs="1" name="errortext" type="xsd:string"/>
+<element maxOccurs="1" minOccurs="1" name="errorref" type="xsd:string"/>
+<element maxOccurs="1" minOccurs="1" name="errorkeyword" type="xsd:string"/>
+</sequence>
+</complexType>
+<complexType name="FakturagetRequest">
+<sequence>
+<element maxOccurs="1" minOccurs="0" name="sessionid" type="xsd:string">
+<annotation>
+<documentation>SessionID</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="t01.kdbkr" type="xsd:long">
+<annotation>
+<documentation>Kundenummer</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="fakturaalfa" type="xsd:string">
+<annotation>
+<documentation>Fakturanummer - string</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="refupper" type="xsd:string">
+<annotation>
+<documentation>RefTx</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="lev1" type="xsd:string">
+<annotation>
+<documentation>Leveringsadresse 1</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="lev2" type="xsd:string">
+<annotation>
+<documentation>Leveringsadresse 2</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="lev3" type="xsd:string">
+<annotation>
+<documentation>Leveringsadresse 3</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="lev4" type="xsd:string">
+<annotation>
+<documentation>Leveringsadresse 4</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="lev5" type="xsd:string">
+<annotation>
+<documentation>Leveringsadresse 5</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="t01.fdato" type="xsd:string">
+<annotation>
+<documentation>Fakturadato</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="fvatxt" type="xsd:string">
+<annotation>
+<documentation>Varetekst</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="varesog" type="xsd:string">
+<annotation>
+<documentation>Samensat varenummer</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="ordrealfa" type="xsd:string">
+<annotation>
+<documentation>Ordrenummer (fra STALIN)</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="limit" type="xsd:long">
+<annotation>
+<documentation>Antal records i respons</documentation>
+</annotation>
+</element>
+</sequence>
+</complexType>
+<element name="fakturaget">
+<complexType>
+<sequence>
+<element maxOccurs="1" minOccurs="0" name="credentials" type="tns:Credentials"/>
+<element maxOccurs="1" minOccurs="1" name="request" type="tns:FakturagetRequest"/>
+</sequence>
+</complexType>
+</element>
+<complexType name="FakturagetResponseGrpfak">
+<sequence>
+<element maxOccurs="1" minOccurs="0" name="t01.faktnr" type="xsd:long">
+<annotation>
+<documentation>Fakturanummer</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="t01.fdato" type="xsd:long">
+<annotation>
+<documentation>Fakturadato i filformat</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="t01.fraval" type="xsd:decimal">
+<annotation>
+<documentation>Fragtbeløb i valuta</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="t01.gebval" type="xsd:decimal">
+<annotation>
+<documentation>Gebyr i valuta</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="t01.momval" type="xsd:decimal">
+<annotation>
+<documentation>Momsbeløb i valuta</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="t01.varval" type="xsd:decimal">
+<annotation>
+<documentation>Varebeløb i valuta</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="t01.ortyp" type="xsd:int">
+<annotation>
+<documentation>Ordretype</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="t01.hraval" type="xsd:decimal">
+<annotation>
+<documentation>Hovedrabat i valuta pr. faktura</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="t02.stxtx1" type="xsd:string">
+<annotation>
+<documentation>Ref. tekst</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="t07.isocod" type="xsd:string">
+<annotation>
+<documentation>Valutas ISO kode</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="kunde" type="xsd:long">
+<annotation>
+<documentation>Kundenummer</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="betaler" type="xsd:string">
+<annotation>
+<documentation>Kædehoved</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="lev1" type="xsd:string">
+<annotation>
+<documentation>Lev1</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="lev2" type="xsd:string">
+<annotation>
+<documentation>Lev2</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="lev3" type="xsd:string">
+<annotation>
+<documentation>Lev3</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="lev4" type="xsd:string">
+<annotation>
+<documentation>Lev4</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="lev5" type="xsd:string">
+<annotation>
+<documentation>Lev5</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="totalbelob" type="xsd:decimal">
+<annotation>
+<documentation>TOTALBELØB</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="fakturaalfa" type="xsd:string">
+<annotation>
+<documentation>Fakturanummer (som alfa felt)</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="kunde1" type="xsd:string">
+<annotation>
+<documentation>KUNDE1</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="kunde2" type="xsd:string">
+<annotation>
+<documentation>KUNDE2</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="kunde3" type="xsd:string">
+<annotation>
+<documentation>KUNDE3</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="kunde4" type="xsd:string">
+<annotation>
+<documentation>KUNDE4</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="kunde5" type="xsd:string">
+<annotation>
+<documentation>KUNDE5</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="betaler1" type="xsd:string">
+<annotation>
+<documentation>BETALER1</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="betaler2" type="xsd:string">
+<annotation>
+<documentation>BETALER2</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="betaler3" type="xsd:string">
+<annotation>
+<documentation>BETALER3</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="betaler4" type="xsd:string">
+<annotation>
+<documentation>BETALER4</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="betaler5" type="xsd:string">
+<annotation>
+<documentation>BETALER5</documentation>
+</annotation>
+</element>
+</sequence>
+</complexType>
+<complexType name="FakturagetResponse">
+<sequence>
+<element maxOccurs="1" minOccurs="0" name="sessionid" type="xsd:string">
+<annotation>
+<documentation>SessionID</documentation>
+</annotation>
+</element>
+<element maxOccurs="unbounded" minOccurs="0" name="grpfak" type="tns:FakturagetResponseGrpfak"/>
+<element maxOccurs="1" minOccurs="1" name="success" type="xsd:boolean"/>
+<element maxOccurs="unbounded" minOccurs="0" name="errors" type="tns:CallError"/>
+</sequence>
+</complexType>
+<element name="fakturagetResult">
+<complexType>
+<sequence>
+<element maxOccurs="1" minOccurs="1" name="response" type="tns:FakturagetResponse"/>
+</sequence>
+</complexType>
+</element>
+<complexType name="FakturalinesgetRequest">
+<sequence>
+<element maxOccurs="1" minOccurs="0" name="sessionid" type="xsd:string">
+<annotation>
+<documentation>SessionID</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="t01.faktnr" type="xsd:long">
+<annotation>
+<documentation>Fakturanummer</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="t01.fdato" type="xsd:string">
+<annotation>
+<documentation>Fakturadato</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="limit" type="xsd:long">
+<annotation>
+<documentation>Antal records i respons</documentation>
+</annotation>
+</element>
+</sequence>
+</complexType>
+<element name="fakturalinesget">
+<complexType>
+<sequence>
+<element maxOccurs="1" minOccurs="0" name="credentials" type="tns:Credentials"/>
+<element maxOccurs="1" minOccurs="1" name="request" type="tns:FakturalinesgetRequest"/>
+</sequence>
+</complexType>
+</element>
+<complexType name="FakturalinesgetResponseGrpfaklines">
+<sequence>
+<element maxOccurs="1" minOccurs="0" name="t01.oordre" type="xsd:long">
+<annotation>
+<documentation>Ordrenummer</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="t01.oorlin" type="xsd:long">
+<annotation>
+<documentation>Ordrelinie</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="t01.felt1" type="xsd:long">
+<annotation>
+<documentation>Felt1</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="t01.felt2" type="xsd:long">
+<annotation>
+<documentation>Felt2</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="t01.felt3" type="xsd:long">
+<annotation>
+<documentation>Felt3</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="t01.felt5" type="xsd:long">
+<annotation>
+<documentation>Felt5</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="t01.felt4" type="xsd:long">
+<annotation>
+<documentation>Felt4</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="t01.rabat" type="xsd:decimal">
+<annotation>
+<documentation>Rabatpct</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="t01.flgsnr" type="xsd:long">
+<annotation>
+<documentation>Følgeseddelnummer</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="t05.far10" type="xsd:string">
+<annotation>
+<documentation>Farvetekst kort</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="t05.far30" type="xsd:string">
+<annotation>
+<documentation>Farvetekst lang</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="t06.stxtx1" type="xsd:string">
+<annotation>
+<documentation>Ref. tekst</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="antal" type="xsd:long">
+<annotation>
+<documentation>Total antal</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="brutto" type="xsd:decimal">
+<annotation>
+<documentation>Brutto pris</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="apris" type="xsd:decimal">
+<annotation>
+<documentation>A pris</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="vartxt" type="xsd:string">
+<annotation>
+<documentation>Sprogafhængig varetekst</documentation>
+</annotation>
+</element>
+</sequence>
+</complexType>
+<complexType name="FakturalinesgetResponse">
+<sequence>
+<element maxOccurs="1" minOccurs="0" name="sessionid" type="xsd:string">
+<annotation>
+<documentation>SessionID</documentation>
+</annotation>
+</element>
+<element maxOccurs="unbounded" minOccurs="0" name="grpfaklines" type="tns:FakturalinesgetResponseGrpfaklines"/>
+<element maxOccurs="1" minOccurs="1" name="success" type="xsd:boolean"/>
+<element maxOccurs="unbounded" minOccurs="0" name="errors" type="tns:CallError"/>
+</sequence>
+</complexType>
+<element name="fakturalinesgetResult">
+<complexType>
+<sequence>
+<element maxOccurs="1" minOccurs="1" name="response" type="tns:FakturalinesgetResponse"/>
+</sequence>
+</complexType>
+</element>
+<complexType name="FakturalinesizesgetRequest">
+<sequence>
+<element maxOccurs="1" minOccurs="0" name="sessionid" type="xsd:string">
+<annotation>
+<documentation>SessionID</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="t01.faktnr" type="xsd:long">
+<annotation>
+<documentation>Fakturanummer</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="t01.fdato" type="xsd:string">
+<annotation>
+<documentation>Fakturadato</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="limit" type="xsd:long">
+<annotation>
+<documentation>Antal records i respons</documentation>
+</annotation>
+</element>
+</sequence>
+</complexType>
+<element name="fakturalinesizesget">
+<complexType>
+<sequence>
+<element maxOccurs="1" minOccurs="0" name="credentials" type="tns:Credentials"/>
+<element maxOccurs="1" minOccurs="1" name="request" type="tns:FakturalinesizesgetRequest"/>
+</sequence>
+</complexType>
+</element>
+<complexType name="FakturalinesizesgetResponseGrporderAntalprstor">
+<sequence>
+<element maxOccurs="1" minOccurs="0" name="stor" type="xsd:string">
+<annotation>
+<documentation>Størrelse</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="antal" type="xsd:long">
+<annotation>
+<documentation>Antal i størrelsen</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="ean" type="xsd:long">
+<annotation>
+<documentation>EAN kode med tjekciffer</documentation>
+</annotation>
+</element>
+</sequence>
+</complexType>
+<complexType name="FakturalinesizesgetResponseGrporder">
+<sequence>
+<element maxOccurs="1" minOccurs="0" name="t01.oordre" type="xsd:int">
+<annotation>
+<documentation>Ordrenummer</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="t01.oorlin" type="xsd:int">
+<annotation>
+<documentation>Ordrelinje</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="apris1" type="xsd:decimal">
+<annotation>
+<documentation>Pris</documentation>
+</annotation>
+</element>
+<element maxOccurs="unbounded" minOccurs="0" name="antalprstor" type="tns:FakturalinesizesgetResponseGrporderAntalprstor"/>
+</sequence>
+</complexType>
+<complexType name="FakturalinesizesgetResponse">
+<sequence>
+<element maxOccurs="1" minOccurs="0" name="sessionid" type="xsd:string">
+<annotation>
+<documentation>SessionID</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="t01.faktnr" type="xsd:long">
+<annotation>
+<documentation>Fakturanummer</documentation>
+</annotation>
+</element>
+<element maxOccurs="unbounded" minOccurs="0" name="grporder" type="tns:FakturalinesizesgetResponseGrporder"/>
+<element maxOccurs="1" minOccurs="1" name="success" type="xsd:boolean"/>
+<element maxOccurs="unbounded" minOccurs="0" name="errors" type="tns:CallError"/>
+</sequence>
+</complexType>
+<element name="fakturalinesizesgetResult">
+<complexType>
+<sequence>
+<element maxOccurs="1" minOccurs="1" name="response" type="tns:FakturalinesizesgetResponse"/>
+</sequence>
+</complexType>
+</element>
+<complexType name="OrdergetRequest">
+<sequence>
+<element maxOccurs="1" minOccurs="0" name="t01.chgto" type="xsd:string">
+<annotation>
+<documentation>Kundenummer</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="aordrenr" type="xsd:string">
+<annotation>
+<documentation>Ordrenummer</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="reftextupper" type="xsd:string">
+<annotation>
+<documentation>Ref. tekst</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="lev1" type="xsd:string">
+<annotation>
+<documentation>Leveringsadresse linje 1</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="lev2" type="xsd:string">
+<annotation>
+<documentation>Leveringsadresse linje 2</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="lev3" type="xsd:string">
+<annotation>
+<documentation>Leveringsadresse linje 3</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="lev4" type="xsd:string">
+<annotation>
+<documentation>Leveringsadresse linje 4</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="lev5" type="xsd:string">
+<annotation>
+<documentation>Leveringsadresse linje 5</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="ordredato" type="xsd:string">
+<annotation>
+<documentation>Ordredato</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="fvatxt" type="xsd:string">
+<annotation>
+<documentation>Varetekst</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="varesog" type="xsd:string">
+<annotation>
+<documentation>Varenummer - sammensat</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="limit" type="xsd:long">
+<annotation>
+<documentation>Antal records i respons</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="invoicenr" type="xsd:string">
+<annotation>
+<documentation>Invoice number</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="pickingnr" type="xsd:string">
+<annotation>
+<documentation>Picking note number</documentation>
+</annotation>
+</element>
+</sequence>
+</complexType>
+<element name="orderget">
+<complexType>
+<sequence>
+<element maxOccurs="1" minOccurs="0" name="credentials" type="tns:Credentials"/>
+<element maxOccurs="1" minOccurs="1" name="request" type="tns:OrdergetRequest"/>
+</sequence>
+</complexType>
+</element>
+<complexType name="OrdergetResponseGrporder">
+<sequence>
+<element maxOccurs="1" minOccurs="0" name="t01.firma" type="xsd:long">
+<annotation>
+<documentation>Firma</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="t01.oordre" type="xsd:long">
+<annotation>
+<documentation>Ordrenummer</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="t08.isocod" type="xsd:string">
+<annotation>
+<documentation>Valutas ISO kode</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="ordredato" type="xsd:long">
+<annotation>
+<documentation>Ordredato</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="reftext" type="xsd:string">
+<annotation>
+<documentation>Ref. tekst</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="lev1" type="xsd:string">
+<annotation>
+<documentation>Leveringsadresse linje 1</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="lev2" type="xsd:string">
+<annotation>
+<documentation>Leveringsadresse linje 2</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="lev3" type="xsd:string">
+<annotation>
+<documentation>Leveringsadresse linje 3</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="lev4" type="xsd:string">
+<annotation>
+<documentation>Leveringsadresse linje 4</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="lev5" type="xsd:string">
+<annotation>
+<documentation>Leveringsadresse linje 5</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="kunde1" type="xsd:string">
+<annotation>
+<documentation>KUNDE1</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="kunde2" type="xsd:string">
+<annotation>
+<documentation>KUNDE2</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="kunde3" type="xsd:string">
+<annotation>
+<documentation>KUNDE3</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="kunde4" type="xsd:string">
+<annotation>
+<documentation>KUNDE4</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="kunde5" type="xsd:string">
+<annotation>
+<documentation>KUNDE5</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="fakturarabat" type="xsd:decimal">
+<annotation>
+<documentation>Fakturarabat</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="betaler1" type="xsd:string">
+<annotation>
+<documentation>BETALER1</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="betaler2" type="xsd:string">
+<annotation>
+<documentation>BETALER2</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="betaler3" type="xsd:string">
+<annotation>
+<documentation>BETALER3</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="betaler4" type="xsd:string">
+<annotation>
+<documentation>BETALER4</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="betaler5" type="xsd:string">
+<annotation>
+<documentation>BETALER5</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="reftextupper" type="xsd:string">
+<annotation>
+<documentation>Ref. tekst</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="status" type="xsd:string">
+<annotation>
+<documentation>Status</documentation>
+</annotation>
+</element>
+</sequence>
+</complexType>
+<complexType name="OrdergetResponse">
+<sequence>
+<element maxOccurs="unbounded" minOccurs="0" name="grporder" type="tns:OrdergetResponseGrporder"/>
+<element maxOccurs="1" minOccurs="1" name="success" type="xsd:boolean"/>
+<element maxOccurs="unbounded" minOccurs="0" name="errors" type="tns:CallError"/>
+</sequence>
+</complexType>
+<element name="ordergetResult">
+<complexType>
+<sequence>
+<element maxOccurs="1" minOccurs="1" name="response" type="tns:OrdergetResponse"/>
+</sequence>
+</complexType>
+</element>
+<complexType name="OrderlinesgetRequest">
+<sequence>
+<element maxOccurs="1" minOccurs="0" name="sessionid" type="xsd:string">
+<annotation>
+<documentation>SessionID</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="t01.oordre" type="xsd:long">
+<annotation>
+<documentation>Ordrenummer</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="limit" type="xsd:long">
+<annotation>
+<documentation>Antal records i respons</documentation>
+</annotation>
+</element>
+</sequence>
+</complexType>
+<element name="orderlinesget">
+<complexType>
+<sequence>
+<element maxOccurs="1" minOccurs="0" name="credentials" type="tns:Credentials"/>
+<element maxOccurs="1" minOccurs="1" name="request" type="tns:OrderlinesgetRequest"/>
+</sequence>
+</complexType>
+</element>
+<complexType name="OrderlinesgetResponseGrpordline">
+<sequence>
+<element maxOccurs="1" minOccurs="0" name="t01.firma" type="xsd:long">
+<annotation>
+<documentation>Firma</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="t01.oordre" type="xsd:long">
+<annotation>
+<documentation>Ordrenummer</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="t01.oorlin" type="xsd:long">
+<annotation>
+<documentation>Ordrelinje</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="t01.felt1" type="xsd:long">
+<annotation>
+<documentation>Felt1</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="t01.felt2" type="xsd:long">
+<annotation>
+<documentation>Felt2</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="t01.felt3" type="xsd:long">
+<annotation>
+<documentation>Felt3</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="t01.felt5" type="xsd:long">
+<annotation>
+<documentation>Felt5</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="t01.felt4" type="xsd:long">
+<annotation>
+<documentation>Felt4</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="t01.senlv" type="xsd:long">
+<annotation>
+<documentation>Senest leveringstermin</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="t01.flgsnr" type="xsd:long">
+<annotation>
+<documentation>Følgeseddelnr</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="t01.rabat" type="xsd:decimal">
+<annotation>
+<documentation>Rabatpct</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="t02.kform" type="xsd:long">
+<annotation>
+<documentation>Forsendelses måde</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="t02.reftx" type="xsd:string">
+<annotation>
+<documentation>Kundens reference</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="t02.hrabat" type="xsd:decimal">
+<annotation>
+<documentation>Fakturarabat</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="t05.far10" type="xsd:string">
+<annotation>
+<documentation>Kort farvetekst</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="t05.far30" type="xsd:string">
+<annotation>
+<documentation>Lang farvetekst</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="fvatxt" type="xsd:string">
+<annotation>
+<documentation>Varetekst</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="antal" type="xsd:long">
+<annotation>
+<documentation>Antal</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="status" type="xsd:string">
+<annotation>
+<documentation>Status</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="brutto" type="xsd:decimal">
+<annotation>
+<documentation>Brutto</documentation>
+</annotation>
+</element>
+</sequence>
+</complexType>
+<complexType name="OrderlinesgetResponse">
+<sequence>
+<element maxOccurs="1" minOccurs="0" name="sessionid" type="xsd:string">
+<annotation>
+<documentation>SessionID</documentation>
+</annotation>
+</element>
+<element maxOccurs="unbounded" minOccurs="0" name="grpordline" type="tns:OrderlinesgetResponseGrpordline"/>
+<element maxOccurs="1" minOccurs="1" name="success" type="xsd:boolean"/>
+<element maxOccurs="unbounded" minOccurs="0" name="errors" type="tns:CallError"/>
+</sequence>
+</complexType>
+<element name="orderlinesgetResult">
+<complexType>
+<sequence>
+<element maxOccurs="1" minOccurs="1" name="response" type="tns:OrderlinesgetResponse"/>
+</sequence>
+</complexType>
+</element>
+<complexType name="StaordlinesgetRequest">
+<sequence>
+<element maxOccurs="1" minOccurs="0" name="sessionid" type="xsd:string">
+<annotation>
+<documentation>SessionID</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="t01.oordre" type="xsd:long">
+<annotation>
+<documentation>Ordrenummer</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="limit" type="xsd:long">
+<annotation>
+<documentation>Antal records i respons</documentation>
+</annotation>
+</element>
+</sequence>
+</complexType>
+<element name="staordlinesget">
+<complexType>
+<sequence>
+<element maxOccurs="1" minOccurs="0" name="credentials" type="tns:Credentials"/>
+<element maxOccurs="1" minOccurs="1" name="request" type="tns:StaordlinesgetRequest"/>
+</sequence>
+</complexType>
+</element>
+<complexType name="StaordlinesgetResponseGrpstaordline">
+<sequence>
+<element maxOccurs="1" minOccurs="0" name="t01.oordre" type="xsd:long">
+<annotation>
+<documentation>Ordrenummer</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="t01.faktnr" type="xsd:long">
+<annotation>
+<documentation>Fakturanummer</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="t01.oorlin" type="xsd:long">
+<annotation>
+<documentation>Ordrelinje</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="t01.felt1" type="xsd:long">
+<annotation>
+<documentation>Felt1</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="t01.felt2" type="xsd:long">
+<annotation>
+<documentation>Felt2</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="t01.felt3" type="xsd:long">
+<annotation>
+<documentation>Felt3</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="t01.felt5" type="xsd:long">
+<annotation>
+<documentation>Felt5</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="t01.felt4" type="xsd:long">
+<annotation>
+<documentation>Felt4</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="t01.rabat" type="xsd:decimal">
+<annotation>
+<documentation>Rabatpct</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="t05.far10" type="xsd:string">
+<annotation>
+<documentation>Kort farvetekst</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="t05.far30" type="xsd:string">
+<annotation>
+<documentation>Lang farvetekst</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="t06.stxtx1" type="xsd:string">
+<annotation>
+<documentation>Kundens reference</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="antal" type="xsd:long">
+<annotation>
+<documentation>Antal</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="brutto" type="xsd:decimal">
+<annotation>
+<documentation>Brutto</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="apris" type="xsd:decimal">
+<annotation>
+<documentation>A pris</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="vartxt" type="xsd:string">
+<annotation>
+<documentation>Varetekst</documentation>
+</annotation>
+</element>
+</sequence>
+</complexType>
+<complexType name="StaordlinesgetResponse">
+<sequence>
+<element maxOccurs="1" minOccurs="0" name="sessionid" type="xsd:string">
+<annotation>
+<documentation>SessionID</documentation>
+</annotation>
+</element>
+<element maxOccurs="unbounded" minOccurs="0" name="grpstaordline" type="tns:StaordlinesgetResponseGrpstaordline"/>
+<element maxOccurs="1" minOccurs="1" name="success" type="xsd:boolean"/>
+<element maxOccurs="unbounded" minOccurs="0" name="errors" type="tns:CallError"/>
+</sequence>
+</complexType>
+<element name="staordlinesgetResult">
+<complexType>
+<sequence>
+<element maxOccurs="1" minOccurs="1" name="response" type="tns:StaordlinesgetResponse"/>
+</sequence>
+</complexType>
+</element>
+<complexType name="OrdlinsizegetRequest">
+<sequence>
+<element maxOccurs="1" minOccurs="0" name="sessionid" type="xsd:string">
+<annotation>
+<documentation>SessionID</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="t01.oordre" type="xsd:long">
+<annotation>
+<documentation>Ordrenummer</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="limit" type="xsd:long">
+<annotation>
+<documentation>Antal records i respons</documentation>
+</annotation>
+</element>
+</sequence>
+</complexType>
+<element name="ordlinsizeget">
+<complexType>
+<sequence>
+<element maxOccurs="1" minOccurs="0" name="credentials" type="tns:Credentials"/>
+<element maxOccurs="1" minOccurs="1" name="request" type="tns:OrdlinsizegetRequest"/>
+</sequence>
+</complexType>
+</element>
+<complexType name="OrdlinsizegetResponseGrpordlinsizeAntalprstor2">
+<sequence>
+<element maxOccurs="1" minOccurs="0" name="stor" type="xsd:string">
+<annotation>
+<documentation>Størrelse</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="antal" type="xsd:long">
+<annotation>
+<documentation>Antal</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="ean" type="xsd:long">
+<annotation>
+<documentation>EAN kode med tjekciffer</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="apris1" type="xsd:decimal">
+<annotation>
+<documentation>Pris</documentation>
+</annotation>
+</element>
+</sequence>
+</complexType>
+<complexType name="OrdlinsizegetResponseGrpordlinsize">
+<sequence>
+<element maxOccurs="1" minOccurs="0" name="t01.oordre" type="xsd:long">
+<annotation>
+<documentation>Ordrenummer</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="t01.oorlin" type="xsd:long">
+<annotation>
+<documentation>Ordrelinje</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="t01.flgsnr" type="xsd:long">
+<annotation>
+<documentation>Følgeseddelnr</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="t01.rabat" type="xsd:decimal">
+<annotation>
+<documentation>Rabatpct</documentation>
+</annotation>
+</element>
+<element maxOccurs="unbounded" minOccurs="0" name="antalprstor2" type="tns:OrdlinsizegetResponseGrpordlinsizeAntalprstor2"/>
+</sequence>
+</complexType>
+<complexType name="OrdlinsizegetResponse">
+<sequence>
+<element maxOccurs="1" minOccurs="0" name="sessionid" type="xsd:string">
+<annotation>
+<documentation>SessionID</documentation>
+</annotation>
+</element>
+<element maxOccurs="unbounded" minOccurs="0" name="grpordlinsize" type="tns:OrdlinsizegetResponseGrpordlinsize"/>
+<element maxOccurs="1" minOccurs="1" name="success" type="xsd:boolean"/>
+<element maxOccurs="unbounded" minOccurs="0" name="errors" type="tns:CallError"/>
+</sequence>
+</complexType>
+<element name="ordlinsizegetResult">
+<complexType>
+<sequence>
+<element maxOccurs="1" minOccurs="1" name="response" type="tns:OrdlinsizegetResponse"/>
+</sequence>
+</complexType>
+</element>
+<complexType name="StalinsizegetRequest">
+<sequence>
+<element maxOccurs="1" minOccurs="0" name="sessionid" type="xsd:string">
+<annotation>
+<documentation>SessionID</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="t01.oordre" type="xsd:long">
+<annotation>
+<documentation>Ordrenummer</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="limit" type="xsd:long">
+<annotation>
+<documentation>Antal records i respons</documentation>
+</annotation>
+</element>
+</sequence>
+</complexType>
+<element name="stalinsizeget">
+<complexType>
+<sequence>
+<element maxOccurs="1" minOccurs="0" name="credentials" type="tns:Credentials"/>
+<element maxOccurs="1" minOccurs="1" name="request" type="tns:StalinsizegetRequest"/>
+</sequence>
+</complexType>
+</element>
+<complexType name="StalinsizegetResponseGrpstalinsizeAntalprstor2">
+<sequence>
+<element maxOccurs="1" minOccurs="0" name="stor" type="xsd:string">
+<annotation>
+<documentation>Størrelse</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="antal" type="xsd:long">
+<annotation>
+<documentation>Antal</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="ean" type="xsd:long">
+<annotation>
+<documentation>EAN kode med tjekciffer</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="apris1" type="xsd:decimal">
+<annotation>
+<documentation>Pris</documentation>
+</annotation>
+</element>
+</sequence>
+</complexType>
+<complexType name="StalinsizegetResponseGrpstalinsize">
+<sequence>
+<element maxOccurs="1" minOccurs="0" name="t01.oordre" type="xsd:long">
+<annotation>
+<documentation>Ordrenummer</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="t01.faktnr" type="xsd:long">
+<annotation>
+<documentation>Fakturanr</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="t01.oorlin" type="xsd:long">
+<annotation>
+<documentation>Ordrelinje</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="t01.flgsnr" type="xsd:long">
+<annotation>
+<documentation>Rabatpct</documentation>
+</annotation>
+</element>
+<element maxOccurs="unbounded" minOccurs="0" name="antalprstor2" type="tns:StalinsizegetResponseGrpstalinsizeAntalprstor2"/>
+</sequence>
+</complexType>
+<complexType name="StalinsizegetResponse">
+<sequence>
+<element maxOccurs="1" minOccurs="0" name="sessionid" type="xsd:string">
+<annotation>
+<documentation>SessionID</documentation>
+</annotation>
+</element>
+<element maxOccurs="unbounded" minOccurs="0" name="grpstalinsize" type="tns:StalinsizegetResponseGrpstalinsize"/>
+<element maxOccurs="1" minOccurs="1" name="success" type="xsd:boolean"/>
+<element maxOccurs="unbounded" minOccurs="0" name="errors" type="tns:CallError"/>
+</sequence>
+</complexType>
+<element name="stalinsizegetResult">
+<complexType>
+<sequence>
+<element maxOccurs="1" minOccurs="1" name="response" type="tns:StalinsizegetResponse"/>
+</sequence>
+</complexType>
+</element>
+<complexType name="FolgeseddelgetRequest">
+<sequence>
+<element maxOccurs="1" minOccurs="0" name="sessionid" type="xsd:string">
+<annotation>
+<documentation>SessionID</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="t01.kdbkr" type="xsd:long">
+<annotation>
+<documentation>Kundenummer</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="t01.flgopr" type="xsd:string">
+<annotation>
+<documentation>Fakturadato</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="aflgsnr" type="xsd:string">
+<annotation>
+<documentation>Følgeseddelnummer</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="lev1" type="xsd:string">
+<annotation>
+<documentation>Leveringsadresse 1</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="lev2" type="xsd:string">
+<annotation>
+<documentation>Leveringsadresse 2</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="lev3" type="xsd:string">
+<annotation>
+<documentation>Leveringsadresse 3</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="lev4" type="xsd:string">
+<annotation>
+<documentation>Leveringsadresse 4</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="lev5" type="xsd:string">
+<annotation>
+<documentation>Leveringsadresse 5</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="refupper" type="xsd:string">
+<annotation>
+<documentation>RefTx</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="varesog" type="xsd:string">
+<annotation>
+<documentation>Samensat varenummer</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="fvatxt" type="xsd:string">
+<annotation>
+<documentation>Varetekst</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="limit" type="xsd:long">
+<annotation>
+<documentation>Antal records i respons</documentation>
+</annotation>
+</element>
+</sequence>
+</complexType>
+<element name="folgeseddelget">
+<complexType>
+<sequence>
+<element maxOccurs="1" minOccurs="0" name="credentials" type="tns:Credentials"/>
+<element maxOccurs="1" minOccurs="1" name="request" type="tns:FolgeseddelgetRequest"/>
+</sequence>
+</complexType>
+</element>
+<complexType name="FolgeseddelgetResponseGrpflgsed">
+<sequence>
+<element maxOccurs="1" minOccurs="0" name="t01.flgsnr" type="xsd:long">
+<annotation>
+<documentation>Følgeseddelnr</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="antaltracktrace" type="xsd:int">
+<annotation>
+<documentation>Antal tracktrace</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="tracktrace" type="xsd:string">
+<annotation>
+<documentation>TrackTrace nummer</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="senddato" type="xsd:int">
+<annotation>
+<documentation>Senddato</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="kunde1" type="xsd:string">
+<annotation>
+<documentation>KUNDE1</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="kunde2" type="xsd:string">
+<annotation>
+<documentation>KUNDE2</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="kunde3" type="xsd:string">
+<annotation>
+<documentation>KUNDE3</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="kunde4" type="xsd:string">
+<annotation>
+<documentation>KUNDE4</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="kunde5" type="xsd:string">
+<annotation>
+<documentation>KUNDE5</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="lev1" type="xsd:string">
+<annotation>
+<documentation>Leveringsadresse 1</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="lev2" type="xsd:string">
+<annotation>
+<documentation>Leveringsadresse 2</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="lev3" type="xsd:string">
+<annotation>
+<documentation>Leveringsadresse 3</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="lev4" type="xsd:string">
+<annotation>
+<documentation>Leveringsadresse 4</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="lev5" type="xsd:string">
+<annotation>
+<documentation>Leveringsadresse 5</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="betaler1" type="xsd:string">
+<annotation>
+<documentation>BETALER1</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="betaler2" type="xsd:string">
+<annotation>
+<documentation>BETALER2</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="betaler3" type="xsd:string">
+<annotation>
+<documentation>BETALER3</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="betaler4" type="xsd:string">
+<annotation>
+<documentation>BETALER4</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="betaler5" type="xsd:string">
+<annotation>
+<documentation>BETALER5</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="forsendelsesmaade" type="xsd:string">
+<annotation>
+<documentation>Forsendelses måde</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="linjekald" type="xsd:string">
+<annotation>
+<documentation>Linjekald</documentation>
+</annotation>
+</element>
+</sequence>
+</complexType>
+<complexType name="FolgeseddelgetResponse">
+<sequence>
+<element maxOccurs="1" minOccurs="0" name="sessionid" type="xsd:string">
+<annotation>
+<documentation>SessionID</documentation>
+</annotation>
+</element>
+<element maxOccurs="unbounded" minOccurs="0" name="grpflgsed" type="tns:FolgeseddelgetResponseGrpflgsed"/>
+<element maxOccurs="1" minOccurs="1" name="success" type="xsd:boolean"/>
+<element maxOccurs="unbounded" minOccurs="0" name="errors" type="tns:CallError"/>
+</sequence>
+</complexType>
+<element name="folgeseddelgetResult">
+<complexType>
+<sequence>
+<element maxOccurs="1" minOccurs="1" name="response" type="tns:FolgeseddelgetResponse"/>
+</sequence>
+</complexType>
+</element>
+<complexType name="FolgordlinesgetRequest">
+<sequence>
+<element maxOccurs="1" minOccurs="0" name="sessionid" type="xsd:string">
+<annotation>
+<documentation>SessionID</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="limit" type="xsd:long">
+<annotation>
+<documentation>Antal records i respons</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="t01.flgsnr" type="xsd:long">
+<annotation>
+<documentation>Følgeseddelnummer</documentation>
+</annotation>
+</element>
+</sequence>
+</complexType>
+<element name="folgordlinesget">
+<complexType>
+<sequence>
+<element maxOccurs="1" minOccurs="0" name="credentials" type="tns:Credentials"/>
+<element maxOccurs="1" minOccurs="1" name="request" type="tns:FolgordlinesgetRequest"/>
+</sequence>
+</complexType>
+</element>
+<complexType name="FolgordlinesgetResponseGrpflgord">
+<sequence>
+<element maxOccurs="1" minOccurs="0" name="t01.firma" type="xsd:long">
+<annotation>
+<documentation>Firma</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="t01.oordre" type="xsd:long">
+<annotation>
+<documentation>Ordrenummer</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="t01.oorlin" type="xsd:long">
+<annotation>
+<documentation>Ordrelinie</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="t01.felt1" type="xsd:long">
+<annotation>
+<documentation>Felt1</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="t01.felt2" type="xsd:long">
+<annotation>
+<documentation>Felt2</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="t01.felt3" type="xsd:long">
+<annotation>
+<documentation>Felt3</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="t01.felt5" type="xsd:long">
+<annotation>
+<documentation>Felt5</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="t01.felt4" type="xsd:long">
+<annotation>
+<documentation>Felt4</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="t01.flgsnr" type="xsd:long">
+<annotation>
+<documentation>Følgeseddelnummer</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="t02.kform" type="xsd:int">
+<annotation>
+<documentation>Forsendelses måde</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="t02.reftx" type="xsd:string">
+<annotation>
+<documentation>Ref. tekst</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="t05.far10" type="xsd:string">
+<annotation>
+<documentation>Kort farvetekst</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="t05.far30" type="xsd:string">
+<annotation>
+<documentation>Lang farvetekst</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="fvatxt" type="xsd:string">
+<annotation>
+<documentation>Varetekst</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="antal" type="xsd:long">
+<annotation>
+<documentation>Antal</documentation>
+</annotation>
+</element>
+</sequence>
+</complexType>
+<complexType name="FolgordlinesgetResponse">
+<sequence>
+<element maxOccurs="1" minOccurs="0" name="sessionid" type="xsd:string">
+<annotation>
+<documentation>SessionID</documentation>
+</annotation>
+</element>
+<element maxOccurs="unbounded" minOccurs="0" name="grpflgord" type="tns:FolgordlinesgetResponseGrpflgord"/>
+<element maxOccurs="1" minOccurs="1" name="success" type="xsd:boolean"/>
+<element maxOccurs="unbounded" minOccurs="0" name="errors" type="tns:CallError"/>
+</sequence>
+</complexType>
+<element name="folgordlinesgetResult">
+<complexType>
+<sequence>
+<element maxOccurs="1" minOccurs="1" name="response" type="tns:FolgordlinesgetResponse"/>
+</sequence>
+</complexType>
+</element>
+<complexType name="FolgstalinesgetRequest">
+<sequence>
+<element maxOccurs="1" minOccurs="0" name="sessionid" type="xsd:string">
+<annotation>
+<documentation>SessionID</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="limit" type="xsd:long">
+<annotation>
+<documentation>Antal records i respons</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="t01.flgsnr" type="xsd:long">
+<annotation>
+<documentation>Følgeseddelnummer</documentation>
+</annotation>
+</element>
+</sequence>
+</complexType>
+<element name="folgstalinesget">
+<complexType>
+<sequence>
+<element maxOccurs="1" minOccurs="0" name="credentials" type="tns:Credentials"/>
+<element maxOccurs="1" minOccurs="1" name="request" type="tns:FolgstalinesgetRequest"/>
+</sequence>
+</complexType>
+</element>
+<complexType name="FolgstalinesgetResponseGrpflgsta">
+<sequence>
+<element maxOccurs="1" minOccurs="0" name="t01.oordre" type="xsd:long">
+<annotation>
+<documentation>Ordrenummer</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="t01.faktnr" type="xsd:long">
+<annotation>
+<documentation>Fakturanr</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="t01.oorlin" type="xsd:long">
+<annotation>
+<documentation>Ordrelinie</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="t01.felt1" type="xsd:long">
+<annotation>
+<documentation>Felt1</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="t01.felt2" type="xsd:long">
+<annotation>
+<documentation>Felt2</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="t01.felt3" type="xsd:long">
+<annotation>
+<documentation>Felt3</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="t01.felt5" type="xsd:long">
+<annotation>
+<documentation>Felt5</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="t01.felt4" type="xsd:long">
+<annotation>
+<documentation>Felt4</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="t01.rabat" type="xsd:decimal">
+<annotation>
+<documentation>Rabatpct</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="t05.far10" type="xsd:string">
+<annotation>
+<documentation>Kort farvetekst</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="t05.far30" type="xsd:string">
+<annotation>
+<documentation>Lang farvetekst</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="t06.stxtx1" type="xsd:string">
+<annotation>
+<documentation>Kundens reference</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="antal" type="xsd:long">
+<annotation>
+<documentation>Antal</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="brutto" type="xsd:decimal">
+<annotation>
+<documentation>Brutto</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="apris" type="xsd:decimal">
+<annotation>
+<documentation>A pris</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="vartxt" type="xsd:string">
+<annotation>
+<documentation>Varetekst</documentation>
+</annotation>
+</element>
+</sequence>
+</complexType>
+<complexType name="FolgstalinesgetResponse">
+<sequence>
+<element maxOccurs="1" minOccurs="0" name="sessionid" type="xsd:string">
+<annotation>
+<documentation>SessionID</documentation>
+</annotation>
+</element>
+<element maxOccurs="unbounded" minOccurs="0" name="grpflgsta" type="tns:FolgstalinesgetResponseGrpflgsta"/>
+<element maxOccurs="1" minOccurs="1" name="success" type="xsd:boolean"/>
+<element maxOccurs="unbounded" minOccurs="0" name="errors" type="tns:CallError"/>
+</sequence>
+</complexType>
+<element name="folgstalinesgetResult">
+<complexType>
+<sequence>
+<element maxOccurs="1" minOccurs="1" name="response" type="tns:FolgstalinesgetResponse"/>
+</sequence>
+</complexType>
+</element>
+<complexType name="FlgordlinsizegetRequest">
+<sequence>
+<element maxOccurs="1" minOccurs="0" name="sessionid" type="xsd:string">
+<annotation>
+<documentation>SessionID</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="t01.flgsnr" type="xsd:long">
+<annotation>
+<documentation>Følgeseddelnummer</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="limit" type="xsd:long">
+<annotation>
+<documentation>Antal records i respons</documentation>
+</annotation>
+</element>
+</sequence>
+</complexType>
+<element name="flgordlinsizeget">
+<complexType>
+<sequence>
+<element maxOccurs="1" minOccurs="0" name="credentials" type="tns:Credentials"/>
+<element maxOccurs="1" minOccurs="1" name="request" type="tns:FlgordlinsizegetRequest"/>
+</sequence>
+</complexType>
+</element>
+<complexType name="FlgordlinsizegetResponseGrpflgordsizeAntalprstor3">
+<sequence>
+<element maxOccurs="1" minOccurs="0" name="stor" type="xsd:string">
+<annotation>
+<documentation>Størrelse</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="antal" type="xsd:long">
+<annotation>
+<documentation>Antal</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="ean" type="xsd:long">
+<annotation>
+<documentation>EAN kode med tjekciffer</documentation>
+</annotation>
+</element>
+</sequence>
+</complexType>
+<complexType name="FlgordlinsizegetResponseGrpflgordsize">
+<sequence>
+<element maxOccurs="1" minOccurs="0" name="t01.oordre" type="xsd:long">
+<annotation>
+<documentation>Ordrenummer</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="t01.oorlin" type="xsd:long">
+<annotation>
+<documentation>Ordrelinje</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="t01.flgsnr" type="xsd:long">
+<annotation>
+<documentation>Følgeseddelnr</documentation>
+</annotation>
+</element>
+<element maxOccurs="unbounded" minOccurs="0" name="antalprstor3" type="tns:FlgordlinsizegetResponseGrpflgordsizeAntalprstor3"/>
+</sequence>
+</complexType>
+<complexType name="FlgordlinsizegetResponse">
+<sequence>
+<element maxOccurs="1" minOccurs="0" name="sessionid" type="xsd:string">
+<annotation>
+<documentation>SessionID</documentation>
+</annotation>
+</element>
+<element maxOccurs="unbounded" minOccurs="0" name="grpflgordsize" type="tns:FlgordlinsizegetResponseGrpflgordsize"/>
+<element maxOccurs="1" minOccurs="1" name="success" type="xsd:boolean"/>
+<element maxOccurs="unbounded" minOccurs="0" name="errors" type="tns:CallError"/>
+</sequence>
+</complexType>
+<element name="flgordlinsizegetResult">
+<complexType>
+<sequence>
+<element maxOccurs="1" minOccurs="1" name="response" type="tns:FlgordlinsizegetResponse"/>
+</sequence>
+</complexType>
+</element>
+<complexType name="FlgstalinsizegetRequest">
+<sequence>
+<element maxOccurs="1" minOccurs="0" name="sessionid" type="xsd:string">
+<annotation>
+<documentation>SessionID</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="t01.flgsnr" type="xsd:long">
+<annotation>
+<documentation>Følgeseddelnummer</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="limit" type="xsd:long">
+<annotation>
+<documentation>Antal records i respons</documentation>
+</annotation>
+</element>
+</sequence>
+</complexType>
+<element name="flgstalinsizeget">
+<complexType>
+<sequence>
+<element maxOccurs="1" minOccurs="0" name="credentials" type="tns:Credentials"/>
+<element maxOccurs="1" minOccurs="1" name="request" type="tns:FlgstalinsizegetRequest"/>
+</sequence>
+</complexType>
+</element>
+<complexType name="FlgstalinsizegetResponseGrpflgstasizeAntalprstor4">
+<sequence>
+<element maxOccurs="1" minOccurs="0" name="stor" type="xsd:string">
+<annotation>
+<documentation>Størrelse</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="antal" type="xsd:long">
+<annotation>
+<documentation>Antal</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="ean" type="xsd:long">
+<annotation>
+<documentation>EAN kode med tjekciffer</documentation>
+</annotation>
+</element>
+</sequence>
+</complexType>
+<complexType name="FlgstalinsizegetResponseGrpflgstasize">
+<sequence>
+<element maxOccurs="1" minOccurs="0" name="t01.oordre" type="xsd:long">
+<annotation>
+<documentation>Ordrenummer</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="t01.faktnr" type="xsd:long">
+<annotation>
+<documentation>Fakturanr</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="t01.oorlin" type="xsd:long">
+<annotation>
+<documentation>Ordrelinje</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="t01.flgsnr" type="xsd:long">
+<annotation>
+<documentation>Rabatpct</documentation>
+</annotation>
+</element>
+<element maxOccurs="unbounded" minOccurs="0" name="antalprstor4" type="tns:FlgstalinsizegetResponseGrpflgstasizeAntalprstor4"/>
+</sequence>
+</complexType>
+<complexType name="FlgstalinsizegetResponse">
+<sequence>
+<element maxOccurs="1" minOccurs="0" name="sessionid" type="xsd:string">
+<annotation>
+<documentation>SessionID</documentation>
+</annotation>
+</element>
+<element maxOccurs="unbounded" minOccurs="0" name="grpflgstasize" type="tns:FlgstalinsizegetResponseGrpflgstasize"/>
+<element maxOccurs="1" minOccurs="1" name="success" type="xsd:boolean"/>
+<element maxOccurs="unbounded" minOccurs="0" name="errors" type="tns:CallError"/>
+</sequence>
+</complexType>
+<element name="flgstalinsizegetResult">
+<complexType>
+<sequence>
+<element maxOccurs="1" minOccurs="1" name="response" type="tns:FlgstalinsizegetResponse"/>
+</sequence>
+</complexType>
+</element>
+<complexType name="FolgesedordgetRequest">
+<sequence>
+<element maxOccurs="1" minOccurs="0" name="sessionid" type="xsd:string">
+<annotation>
+<documentation>SessionID</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="t01.kdbkr" type="xsd:long">
+<annotation>
+<documentation>Kundenummer</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="aordrenr" type="xsd:string">
+<annotation>
+<documentation>Ordrenummer</documentation>
+</annotation>
+</element>
+</sequence>
+</complexType>
+<element name="folgesedordget">
+<complexType>
+<sequence>
+<element maxOccurs="1" minOccurs="0" name="credentials" type="tns:Credentials"/>
+<element maxOccurs="1" minOccurs="1" name="request" type="tns:FolgesedordgetRequest"/>
+</sequence>
+</complexType>
+</element>
+<complexType name="FolgesedordgetResponseGrpflgsed">
+<sequence>
+<element maxOccurs="1" minOccurs="0" name="t01.flgsnr" type="xsd:long">
+<annotation>
+<documentation>Følgeseddelnr</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="antaltracktrace" type="xsd:int">
+<annotation>
+<documentation>Antal tracktrace</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="tracktrace" type="xsd:string">
+<annotation>
+<documentation>TrackTrace nummer</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="senddato" type="xsd:int">
+<annotation>
+<documentation>Senddato</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="kunde1" type="xsd:string">
+<annotation>
+<documentation>KUNDE1</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="kunde2" type="xsd:string">
+<annotation>
+<documentation>KUNDE2</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="kunde3" type="xsd:string">
+<annotation>
+<documentation>KUNDE3</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="kunde4" type="xsd:string">
+<annotation>
+<documentation>KUNDE4</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="kunde5" type="xsd:string">
+<annotation>
+<documentation>KUNDE5</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="lev1" type="xsd:string">
+<annotation>
+<documentation>Leveringsadresse 1</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="lev2" type="xsd:string">
+<annotation>
+<documentation>Leveringsadresse 2</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="lev3" type="xsd:string">
+<annotation>
+<documentation>Leveringsadresse 3</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="lev4" type="xsd:string">
+<annotation>
+<documentation>Leveringsadresse 4</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="lev5" type="xsd:string">
+<annotation>
+<documentation>Leveringsadresse 5</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="betaler1" type="xsd:string">
+<annotation>
+<documentation>BETALER1</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="betaler2" type="xsd:string">
+<annotation>
+<documentation>BETALER2</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="betaler3" type="xsd:string">
+<annotation>
+<documentation>BETALER3</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="betaler4" type="xsd:string">
+<annotation>
+<documentation>BETALER4</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="betaler5" type="xsd:string">
+<annotation>
+<documentation>BETALER5</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="forsendelsesmaade" type="xsd:string">
+<annotation>
+<documentation>Forsendelses måde</documentation>
+</annotation>
+</element>
+<element maxOccurs="1" minOccurs="0" name="linjekald" type="xsd:string">
+<annotation>
+<documentation>Linjekald</documentation>
+</annotation>
+</element>
+</sequence>
+</complexType>
+<complexType name="FolgesedordgetResponse">
+<sequence>
+<element maxOccurs="1" minOccurs="0" name="sessionid" type="xsd:string">
+<annotation>
+<documentation>SessionID</documentation>
+</annotation>
+</element>
+<element maxOccurs="unbounded" minOccurs="0" name="grpflgsed" type="tns:FolgesedordgetResponseGrpflgsed"/>
+<element maxOccurs="1" minOccurs="1" name="success" type="xsd:boolean"/>
+<element maxOccurs="unbounded" minOccurs="0" name="errors" type="tns:CallError"/>
+</sequence>
+</complexType>
+<element name="folgesedordgetResult">
+<complexType>
+<sequence>
+<element maxOccurs="1" minOccurs="1" name="response" type="tns:FolgesedordgetResponse"/>
+</sequence>
+</complexType>
+</element>
+</schema>
+  </wsdl:types>
+  <wsdl:message name="fakturalinesgetRequestMessage">
+    <wsdl:part name="parameter" element="tns:fakturalinesget">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="folgstalinesgetRequestMessage">
+    <wsdl:part name="parameter" element="tns:folgstalinesget">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="orderlinesgetRequestMessage">
+    <wsdl:part name="parameter" element="tns:orderlinesget">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="ordergetRequestMessage">
+    <wsdl:part name="parameter" element="tns:orderget">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="staordlinesgetRequestMessage">
+    <wsdl:part name="parameter" element="tns:staordlinesget">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="flgstalinsizegetRequestMessage">
+    <wsdl:part name="parameter" element="tns:flgstalinsizeget">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="staordlinesgetResponseMessage">
+    <wsdl:part name="parameter" element="tns:staordlinesgetResult">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="ordlinsizegetRequestMessage">
+    <wsdl:part name="parameter" element="tns:ordlinsizeget">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="folgeseddelgetRequestMessage">
+    <wsdl:part name="parameter" element="tns:folgeseddelget">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="folgordlinesgetResponseMessage">
+    <wsdl:part name="parameter" element="tns:folgordlinesgetResult">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="fakturalinesgetResponseMessage">
+    <wsdl:part name="parameter" element="tns:fakturalinesgetResult">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="ordlinsizegetResponseMessage">
+    <wsdl:part name="parameter" element="tns:ordlinsizegetResult">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="folgordlinesgetRequestMessage">
+    <wsdl:part name="parameter" element="tns:folgordlinesget">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="fakturagetResponseMessage">
+    <wsdl:part name="parameter" element="tns:fakturagetResult">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="orderlinesgetResponseMessage">
+    <wsdl:part name="parameter" element="tns:orderlinesgetResult">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="stalinsizegetResponseMessage">
+    <wsdl:part name="parameter" element="tns:stalinsizegetResult">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="fakturalinesizesgetResponseMessage">
+    <wsdl:part name="parameter" element="tns:fakturalinesizesgetResult">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="flgordlinsizegetRequestMessage">
+    <wsdl:part name="parameter" element="tns:flgordlinsizeget">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="folgeseddelgetResponseMessage">
+    <wsdl:part name="parameter" element="tns:folgeseddelgetResult">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="flgstalinsizegetResponseMessage">
+    <wsdl:part name="parameter" element="tns:flgstalinsizegetResult">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="stalinsizegetRequestMessage">
+    <wsdl:part name="parameter" element="tns:stalinsizeget">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="folgesedordgetRequestMessage">
+    <wsdl:part name="parameter" element="tns:folgesedordget">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="folgstalinesgetResponseMessage">
+    <wsdl:part name="parameter" element="tns:folgstalinesgetResult">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="folgesedordgetResponseMessage">
+    <wsdl:part name="parameter" element="tns:folgesedordgetResult">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="ordergetResponseMessage">
+    <wsdl:part name="parameter" element="tns:ordergetResult">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="fakturalinesizesgetRequestMessage">
+    <wsdl:part name="parameter" element="tns:fakturalinesizesget">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="fakturagetRequestMessage">
+    <wsdl:part name="parameter" element="tns:fakturaget">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="flgordlinsizegetResponseMessage">
+    <wsdl:part name="parameter" element="tns:flgordlinsizegetResult">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="EA7602RA">
+    <wsdl:operation name="fakturaget">
+<wsdl:documentation>Hent fakturaer</wsdl:documentation>
+      <wsdl:input name="fakturagetRequestMessage" message="tns:fakturagetRequestMessage">
+    </wsdl:input>
+      <wsdl:output name="fakturagetResponseMessage" message="tns:fakturagetResponseMessage">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="fakturalinesget">
+<wsdl:documentation>Hent fakturalinjer</wsdl:documentation>
+      <wsdl:input name="fakturalinesgetRequestMessage" message="tns:fakturalinesgetRequestMessage">
+    </wsdl:input>
+      <wsdl:output name="fakturalinesgetResponseMessage" message="tns:fakturalinesgetResponseMessage">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="fakturalinesizesget">
+<wsdl:documentation>Hent fakturalinje størrelser</wsdl:documentation>
+      <wsdl:input name="fakturalinesizesgetRequestMessage" message="tns:fakturalinesizesgetRequestMessage">
+    </wsdl:input>
+      <wsdl:output name="fakturalinesizesgetResponseMessage" message="tns:fakturalinesizesgetResponseMessage">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="orderget">
+<wsdl:documentation>Hent ordrehoveder</wsdl:documentation>
+      <wsdl:input name="ordergetRequestMessage" message="tns:ordergetRequestMessage">
+    </wsdl:input>
+      <wsdl:output name="ordergetResponseMessage" message="tns:ordergetResponseMessage">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="orderlinesget">
+<wsdl:documentation>Hent ordrelinjer</wsdl:documentation>
+      <wsdl:input name="orderlinesgetRequestMessage" message="tns:orderlinesgetRequestMessage">
+    </wsdl:input>
+      <wsdl:output name="orderlinesgetResponseMessage" message="tns:orderlinesgetResponseMessage">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="staordlinesget">
+<wsdl:documentation>Hent ordrelinjer fra stalin</wsdl:documentation>
+      <wsdl:input name="staordlinesgetRequestMessage" message="tns:staordlinesgetRequestMessage">
+    </wsdl:input>
+      <wsdl:output name="staordlinesgetResponseMessage" message="tns:staordlinesgetResponseMessage">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ordlinsizeget">
+<wsdl:documentation>Hent størrelser fra ordlin</wsdl:documentation>
+      <wsdl:input name="ordlinsizegetRequestMessage" message="tns:ordlinsizegetRequestMessage">
+    </wsdl:input>
+      <wsdl:output name="ordlinsizegetResponseMessage" message="tns:ordlinsizegetResponseMessage">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="stalinsizeget">
+<wsdl:documentation>Hent størrelser fra stalin</wsdl:documentation>
+      <wsdl:input name="stalinsizegetRequestMessage" message="tns:stalinsizegetRequestMessage">
+    </wsdl:input>
+      <wsdl:output name="stalinsizegetResponseMessage" message="tns:stalinsizegetResponseMessage">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="folgeseddelget">
+<wsdl:documentation>Hent føllgeseddel hovedder</wsdl:documentation>
+      <wsdl:input name="folgeseddelgetRequestMessage" message="tns:folgeseddelgetRequestMessage">
+    </wsdl:input>
+      <wsdl:output name="folgeseddelgetResponseMessage" message="tns:folgeseddelgetResponseMessage">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="folgordlinesget">
+<wsdl:documentation>Hent følgeseddel linjer (ordlin)</wsdl:documentation>
+      <wsdl:input name="folgordlinesgetRequestMessage" message="tns:folgordlinesgetRequestMessage">
+    </wsdl:input>
+      <wsdl:output name="folgordlinesgetResponseMessage" message="tns:folgordlinesgetResponseMessage">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="folgstalinesget">
+<wsdl:documentation>Hent følgeseddel linjer fra stalin</wsdl:documentation>
+      <wsdl:input name="folgstalinesgetRequestMessage" message="tns:folgstalinesgetRequestMessage">
+    </wsdl:input>
+      <wsdl:output name="folgstalinesgetResponseMessage" message="tns:folgstalinesgetResponseMessage">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="flgordlinsizeget">
+<wsdl:documentation>Hent følgeseddel støørelser (ordlin)</wsdl:documentation>
+      <wsdl:input name="flgordlinsizegetRequestMessage" message="tns:flgordlinsizegetRequestMessage">
+    </wsdl:input>
+      <wsdl:output name="flgordlinsizegetResponseMessage" message="tns:flgordlinsizegetResponseMessage">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="flgstalinsizeget">
+<wsdl:documentation>Hent følgeseddel størrelser (stalin)</wsdl:documentation>
+      <wsdl:input name="flgstalinsizegetRequestMessage" message="tns:flgstalinsizegetRequestMessage">
+    </wsdl:input>
+      <wsdl:output name="flgstalinsizegetResponseMessage" message="tns:flgstalinsizegetResponseMessage">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="folgesedordget">
+<wsdl:documentation>Hent føllgeseddel hovedder ved ordrenummer</wsdl:documentation>
+      <wsdl:input name="folgesedordgetRequestMessage" message="tns:folgesedordgetRequestMessage">
+    </wsdl:input>
+      <wsdl:output name="folgesedordgetResponseMessage" message="tns:folgesedordgetResponseMessage">
+    </wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="EA7602RASoapBinding" type="tns:EA7602RA">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="fakturaget">
+      <soap:operation soapAction=""/>
+      <wsdl:input name="fakturagetRequestMessage">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="fakturagetResponseMessage">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="fakturalinesget">
+      <soap:operation soapAction=""/>
+      <wsdl:input name="fakturalinesgetRequestMessage">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="fakturalinesgetResponseMessage">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="fakturalinesizesget">
+      <soap:operation soapAction=""/>
+      <wsdl:input name="fakturalinesizesgetRequestMessage">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="fakturalinesizesgetResponseMessage">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="orderget">
+      <soap:operation soapAction=""/>
+      <wsdl:input name="ordergetRequestMessage">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="ordergetResponseMessage">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="orderlinesget">
+      <soap:operation soapAction=""/>
+      <wsdl:input name="orderlinesgetRequestMessage">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="orderlinesgetResponseMessage">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="staordlinesget">
+      <soap:operation soapAction=""/>
+      <wsdl:input name="staordlinesgetRequestMessage">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="staordlinesgetResponseMessage">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ordlinsizeget">
+      <soap:operation soapAction=""/>
+      <wsdl:input name="ordlinsizegetRequestMessage">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="ordlinsizegetResponseMessage">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="stalinsizeget">
+      <soap:operation soapAction=""/>
+      <wsdl:input name="stalinsizegetRequestMessage">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="stalinsizegetResponseMessage">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="folgeseddelget">
+      <soap:operation soapAction=""/>
+      <wsdl:input name="folgeseddelgetRequestMessage">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="folgeseddelgetResponseMessage">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="folgordlinesget">
+      <soap:operation soapAction=""/>
+      <wsdl:input name="folgordlinesgetRequestMessage">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="folgordlinesgetResponseMessage">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="folgstalinesget">
+      <soap:operation soapAction=""/>
+      <wsdl:input name="folgstalinesgetRequestMessage">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="folgstalinesgetResponseMessage">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="flgordlinsizeget">
+      <soap:operation soapAction=""/>
+      <wsdl:input name="flgordlinsizegetRequestMessage">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="flgordlinsizegetResponseMessage">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="flgstalinsizeget">
+      <soap:operation soapAction=""/>
+      <wsdl:input name="flgstalinsizegetRequestMessage">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="flgstalinsizegetResponseMessage">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="folgesedordget">
+      <soap:operation soapAction=""/>
+      <wsdl:input name="folgesedordgetRequestMessage">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="folgesedordgetResponseMessage">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="EA7602RA">
+<wsdl:documentation>KET Webservice Spc</wsdl:documentation>
+    <wsdl:port name="EA7602RA" binding="tns:EA7602RASoapBinding">
+      <soap:address location="https://texb2b.aspect4.com:443/kentaur_webservices/services/EA7602RA.EA7602RA/"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
