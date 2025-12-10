@@ -115,6 +115,10 @@ def fetch_orders(
         'limit': search_limit
     }
 
+    # Use start date as filter if available (API treats as >=)
+    if min_dato > 0:
+        order_request['ordredato'] = str(min_dato)
+
     # Add order number filter if specified
     if order_number:
         order_request['aordrenr'] = order_number

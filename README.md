@@ -1,12 +1,11 @@
 # Aspect4 Order API
 
-A FastAPI-based application that wraps the Aspect4 SOAP API to provide a clean, RESTful interface for fetching order statuses. This application is designed to be deployed as an Azure Container App and registered as a plugin in Microsoft Copilot Studio.
+A FastAPI-based application that wraps the Aspect4 SOAP API to provide a clean, RESTful interface for fetching order statuses. This application is designed to be registered as a plugin in Microsoft Copilot Studio.
 
 ## Architecture
 
 - **main.py**: The FastAPI application entry point, defining the API routes and schema (Pydantic models).
 - **aspect4_client.py**: The core logic layer that communicates with the Aspect4 SOAP service using `zeep`.
-- **Dockerfile**: Configuration for building the Docker image.
 - **GetOrder.py**: (Legacy) Command-line script for testing purposes.
 
 ## API Endpoint
@@ -43,22 +42,6 @@ Fetches a list of orders based on the improved filtering logic.
 
 4. **Test the API:**
    Global to `http://localhost:8000/docs` to see the Swagger UI.
-
-## Deployment to Azure Container Apps
-
-1. **Build the Image:**
-   ```bash
-   docker build -t aspect4-api .
-   ```
-
-2. **Push to Registry:**
-   Push this image to your Azure Container Registry (ACR).
-
-3. **Deploy Container App:**
-   - Create a new Container App in Azure.
-   - Use the image from your ACR.
-   - **Important**: Set the `ASPECT4_USERNAME` and `ASPECT4_PASSWORD` as environment variables (Secrets) in the Container App configuration.
-   - Set "Ingress" to Enabled and "Target Port" to `8000`.
 
 ## Registering in Copilot Studio
 

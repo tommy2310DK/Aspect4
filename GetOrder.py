@@ -97,6 +97,13 @@ else:
     one_month_ago = now - timedelta(days=30)
     min_dato = int(one_month_ago.strftime('%Y%m%d'))
     max_dato = int(now.strftime('%Y%m%d'))
+    # Don't strictly filter unrelated orders by default, just mark them
+    explicit_date_filter = False
+
+if args.days or (args.start_date and args.end_date):
+    explicit_date_filter = True
+else:
+    explicit_date_filter = False
 
 # Determine fetch limit (search depth)
 # If filtering by status, fetch more to ensure we find enough matches
@@ -109,6 +116,10 @@ order_request = {
     't01.chgto': args.customer_number,
     'limit': search_limit
 }
+
+# Add date filter if available (hoping API treats it as >= or exact match)
+if explicit_date_filter:
+    order_request['ordredato'] = str(min_dato)
 
 # Add order number filter if specified
 if args.order_number:
@@ -144,6 +155,11 @@ for order in orders['grporder']:
             if order_status == "Færdig leveret":
                 continue
         elif order_status != args.order_status:
+            continue
+    
+    # Filter by date if explicitly requested
+    if explicit_date_filter:
+        if not (min_dato <= ordredato <= max_dato):
             continue
     
     order_data = {
