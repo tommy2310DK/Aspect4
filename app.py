@@ -91,6 +91,63 @@ async def get_orders(
         print(f"Internal Error: {e}")
         raise HTTPException(status_code=500, detail="Internal server error while communicating with Aspect4")
 
+
+from fastapi.openapi.utils import get_openapi
+
+def custom_openapi():
+    if app.openapi_schema:
+        return app.openapi_schema
+    
+    # Generate the schema
+    openapi_schema = get_openapi(
+        title=app.title,
+        version=app.version,
+        description=app.description,
+        routes=app.routes,
+        servers=app.servers,
+    )
+    
+    # Enforce OpenAPI 3.0.1 for compatibility with Microsoft Power Platform / Copilot Studio
+    openapi_schema["openapi"] = "3.0.1"
+    
+    # Helper to recursively fix Pydantic v2 "anyOf" / type lists to OpenAPI 3.0 "nullable"
+    def fix_schema_compatibility(schema_obj):
+        if isinstance(schema_obj, dict):
+            # Fix: type: ["string", "null"] -> type: string, nullable: true
+            if "type" in schema_obj and isinstance(schema_obj["type"], list):
+                if "null" in schema_obj["type"]:
+                    schema_obj["nullable"] = True
+                    schema_obj["type"] = [t for t in schema_obj["type"] if t != "null"][0]
+
+            # Fix: anyOf: [{type: string}, {type: null}] -> type: string, nullable: true
+            if "anyOf" in schema_obj:
+                types = [x.get("type") for x in schema_obj["anyOf"] if "type" in x]
+                if "null" in types and len(schema_obj["anyOf"]) == 2:
+                    # Find the non-null type
+                    non_null_schema = next((x for x in schema_obj["anyOf"] if x.get("type") != "null"), None)
+                    if non_null_schema:
+                        # Copy properties from the non-null schema
+                        for k, v in non_null_schema.items():
+                            schema_obj[k] = v
+                        schema_obj["nullable"] = True
+                        del schema_obj["anyOf"]
+            
+            # Recurse
+            for value in schema_obj.values():
+                fix_schema_compatibility(value)
+        
+        elif isinstance(schema_obj, list):
+            for item in schema_obj:
+                fix_schema_compatibility(item)
+
+    # Apply the fix to components and paths
+    fix_schema_compatibility(openapi_schema)
+    
+    app.openapi_schema = openapi_schema
+    return app.openapi_schema
+
+app.openapi = custom_openapi
+
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8000)
