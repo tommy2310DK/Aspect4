@@ -5,6 +5,7 @@ import json
 from decimal import Decimal
 import argparse
 import sys
+import os
 
 # Custom JSON encoder to handle Decimal and other types
 class CustomJSONEncoder(json.JSONEncoder):
@@ -50,8 +51,8 @@ parser.add_argument('--order_number', type=str, help='Specific order number (opt
 parser.add_argument('--days', type=int, help='Number of days in the past from today (optional)')
 parser.add_argument('--start_date', type=str, help='Start date in YYYYMMDD format (optional)')
 parser.add_argument('--end_date', type=str, help='End date in YYYYMMDD format (optional)')
-parser.add_argument('--limit', type=int, default=100, help='Maximum number of orders to fetch (default: 100)')
-parser.add_argument('--order_status', type=str, help='Filter by order status (optional). Common values: "Færdig leveret" (Fully delivered), "Delvis leveret" (Partially delivered), "Ikke leveret" (Not delivered)')
+parser.add_argument('--limit', type=int, default=50, help='Maximum number of orders to fetch (default: 50)')
+parser.add_argument('--order_status', type=str, help='Filter by order status (optional). Values: "Done" (Færdig leveret), "Open" (Anything but Færdig leveret), or specific status like "Delvis leveret"')
 
 args = parser.parse_args()
 
@@ -60,9 +61,20 @@ if args.start_date and args.end_date and args.days:
     print("Error: Cannot specify both date range (start_date/end_date) and days parameter", file=sys.stderr)
     sys.exit(1)
 
+
+
 wsdl = 'EA7602RA.wsdl'
 client = Client(wsdl)
-credentials = {'user': 'KETTOM', 'password': 'mercedesbenz2310'}
+
+# Get credentials from environment variables
+username = os.environ.get('ASPECT4_USERNAME')
+password = os.environ.get('ASPECT4_PASSWORD')
+
+if not username or not password:
+    print("Error: Environment variables ASPECT4_USERNAME and ASPECT4_PASSWORD must be set.", file=sys.stderr)
+    sys.exit(1)
+
+credentials = {'user': username, 'password': password}
 
 # Calculate date filter based on parameters
 now = datetime.now()
@@ -86,10 +98,16 @@ else:
     min_dato = int(one_month_ago.strftime('%Y%m%d'))
     max_dato = int(now.strftime('%Y%m%d'))
 
+# Determine fetch limit (search depth)
+# If filtering by status, fetch more to ensure we find enough matches
+search_limit = args.limit
+if args.order_status:
+    search_limit = max(1000, args.limit)
+
 # Build order request
 order_request = {
     't01.chgto': args.customer_number,
-    'limit': args.limit
+    'limit': search_limit
 }
 
 # Add order number filter if specified
@@ -118,8 +136,15 @@ for order in orders['grporder']:
     order_status = order.get('status', '')
     
     # Filter by order status if specified
-    if args.order_status and order_status != args.order_status:
-        continue
+    if args.order_status:
+        if args.order_status == "Done":
+            if order_status != "Færdig leveret":
+                continue
+        elif args.order_status == "Open":
+            if order_status == "Færdig leveret":
+                continue
+        elif order_status != args.order_status:
+            continue
     
     order_data = {
         "order_number": ordrenr,
@@ -309,6 +334,10 @@ for order in orders['grporder']:
     
     output_data["orders_with_lines"] += 1
     output_data["orders"].append(order_data)
+    
+    # Stop if we have reached the requested limit
+    if len(output_data["orders"]) >= args.limit:
+        break
 
 # Output as formatted JSON
 print(json.dumps(output_data, indent=2, ensure_ascii=False, cls=CustomJSONEncoder))

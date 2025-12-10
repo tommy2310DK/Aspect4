@@ -23,7 +23,7 @@ pip install zeep
 ### Basic Syntax
 
 ```bash
-python Hentkunde.py <customer_number> [OPTIONS]
+python GetOrder.py <customer_number> [OPTIONS]
 ```
 
 ### Parameters
@@ -41,57 +41,58 @@ python Hentkunde.py <customer_number> [OPTIONS]
 
 #### Order Status Values
 
-The `--order_status` parameter filters orders by their delivery status. Common values include:
+The `--order_status` parameter filters orders by their delivery status. You can use the simplified keywords "Done" and "Open", or specific Aspect4 status strings:
 
 | Status | Description | Use Case |
 |--------|-------------|----------|
-| `Færdig leveret` | Fully delivered | Show only completed orders |
+| `Done` | Alias for "Færdig leveret" | Show only fully completed orders |
+| `Open` | Everything EXCEPT "Færdig leveret" | Show all active/pending orders |
+| `Færdig leveret` | Fully delivered | Same as "Done" |
 | `Delvis leveret` | Partially delivered | Show orders with pending items |
 | `Ikke leveret` | Not delivered | Show orders awaiting delivery |
-| *(empty string)* | No status | Show orders without status |
 
-**Note:** Status values are case-sensitive and must match exactly. The actual available statuses may vary depending on your Aspect4 configuration.
+**Note:** Specific status values (like "Delvis leveret") are case-sensitive. The keywords "Done" and "Open" are added for convenience.
 
 ### Examples
 
 #### 1. Fetch last 30 days of orders (default)
 ```bash
-python Hentkunde.py "010000020"
+python GetOrder.py "010000020"
 ```
 
 #### 2. Fetch last 180 days with limit
 ```bash
-python Hentkunde.py "010000020" --days 180 --limit 50
+python GetOrder.py "010000020" --days 180 --limit 50
 ```
 
 #### 3. Fetch specific order
 ```bash
-python Hentkunde.py "010000020" --order_number 1033900
+python GetOrder.py "010000020" --order_number 1033900
 ```
 
 #### 4. Fetch orders in date range
 ```bash
-python Hentkunde.py "010000020" --start_date 20250601 --end_date 20250603
+python GetOrder.py "010000020" --start_date 20250601 --end_date 20250603
 ```
 
-#### 5. Filter by order status (fully delivered)
+#### 5. Filter by order status (Done / Fully delivered)
 ```bash
-python Hentkunde.py "010000020" --order_status "Færdig leveret" --limit 20
+python GetOrder.py "010000020" --order_status "Done" --limit 20
 ```
 
-#### 6. Filter by order status (partially delivered)
+#### 6. Filter by order status (Open / Active orders)
 ```bash
-python Hentkunde.py "010000020" --order_status "Delvis leveret" --days 90
+python GetOrder.py "010000020" --order_status "Open" --days 90
 ```
 
-#### 7. Find undelivered orders
+#### 7. Find undelivered orders (Specific status)
 ```bash
-python Hentkunde.py "010000020" --order_status "Ikke leveret"
+python GetOrder.py "010000020" --order_status "Ikke leveret"
 ```
 
 #### 8. Save output to file
 ```bash
-python Hentkunde.py "010000020" --limit 10 > orders.json
+python GetOrder.py "010000020" --limit 10 > orders.json
 ```
 
 ## Output Structure
