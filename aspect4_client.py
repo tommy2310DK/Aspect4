@@ -139,6 +139,7 @@ def fetch_orders(
         ordredato = order['ordredato']
         order_status = order.get('status', '')
         
+        
         # Filter by order status if specified
         if order_status_filter:
             if order_status_filter == "Done":
@@ -149,12 +150,18 @@ def fetch_orders(
                     continue
             elif order_status != order_status_filter:
                 continue
+
+        # Filter by date if specified
+        # If min_dato and max_dato are set (non-zero), strict filter apply
+        if min_dato > 0 and max_dato > 0:
+            if not (min_dato <= ordredato <= max_dato):
+                continue
         
         order_data = {
             "order_number": ordrenr,
             "order_date": ordredato,
             "order_status": order_status,
-            "within_date_filter": min_dato <= ordredato <= max_dato,
+            "within_date_filter": True, # Always true now since we filter above
             "order_lines": []
         }
         
