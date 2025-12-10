@@ -36,7 +36,7 @@ python GetOrder.py <customer_number> [OPTIONS]
 - `--days N` - Fetch orders from last N days
 - `--start_date YYYYMMDD` - Start date for date range
 - `--end_date YYYYMMDD` - End date for date range
-- `--limit N` - Maximum number of orders to fetch (default: 100)
+- `--limit N` - Maximum number of orders to fetch (default: 50)
 - `--order_status STATUS` - Filter by order delivery status
 
 #### Order Status Values
