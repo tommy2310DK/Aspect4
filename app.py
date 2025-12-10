@@ -7,6 +7,10 @@ app = FastAPI(
     title="Aspect4 Order API",
     description="API for fetching comprehensive order information from Aspect4, including delivery status and size-level details.",
     version="1.0.0",
+    servers=[
+        {"url": "https://aspect4-g7bqgchcfahfc4cq.westeurope-01.azurewebsites.net", "description": "Production Server"},
+        {"url": "http://localhost:8000", "description": "Local Development"}
+    ]
 )
 
 class SizeInfo(BaseModel):
